@@ -1,0 +1,291 @@
+﻿
+@using WebApplication3.Data.ViewModels; 
+@model ShoppingCartVM
+@{
+    
+    ViewData["Title"] = "Stripe Subscriptions | ASP.NET Core MVC";
+}
+<link href="~/css/style.css" rel="stylesheet" />
+<div class="text-center">
+    @*BEGIN Loading Screen*@
+    <div id="ProgressBackground" style="display: none;"></div>
+    <div id="Progress" style="display: none;">
+        <img src="~/images/loading.gif" alt="loading" />
+    </div>
+    @*END Loading Screen*@
+
+<main id="main" class="loading">
+        @*BEGIN Subscriptions*@
+
+
+        @*BEGIN Card Element*@
+        <div id="divCardElement">
+            <div class="paymentform">
+                <section>
+                    <h2>Payment Information</h2>
+                    <fieldset>
+                        <label>
+                            <span>Name</span>
+                            <input name="name" id="name" class="field" placeholder="Emma Potter" required />
+                        </label>
+                        <label>
+                            <span>Email</span>
+                            <input name="email" id="email" type="email" class="field" placeholder="emma@example.com" required />
+                        </label>
+                    </fieldset>
+                    <fieldset>
+                        <label>
+                            <div id="card-element" class="field StripeElement SE"></div>
+                        </label>
+                    </fieldset>
+                </section>
+                <div class="form-group">
+                    <input type="submit" ID="paymentButton" class="payment-button button" Text="Pay" />
+                </div>
+            </div>
+        </div>
+        @*END Card Element*@
+
+        <div id="card-errors" class="element-errors"></div>
+    </div>
+@*END Subscriptions*@
+
+@*BEGIN CONFIRMATION*@
+    <div id="confirmation">
+        <div class="status success">
+            <h1>Thanks for your order!</h1>
+            <p>Woot! You successfully made a subscription payment with Stripe.</p>
+            <p id="pInvoice"></p>
+            <p id="pCustomer"></p>
+        </div>
+        <div class="status error">
+            <h1>Oops, payment failed.</h1>
+            <p>It looks like your order could not be paid at this time. Please try again or select a different payment option.</p>
+            <p class="error-message"></p>
+        </div>
+    </div>
+@*END CONFIRMATION*@
+</main>
+
+
+
+@*BEGIN Card and other Payment Methods Custom Script*@
+    <script type="text/javascript">
+
+        // Load data from backend
+    let stripe = Stripe('pk_test_51N9sPpDprfyvhQjoingqjh9S848PSX3p7JU9CPwHiL1AiJWZ2lonoBQuMII5zRndx5z7gT0AW2YsWxXr4VAtQogH00aWgWL8Ob');
+    var PriceId = 'price_1Nx4FzDprfyvhQjojNg7CfbI';
+    var Amount = 100;
+     console.log(Amount);
+     var Quantity = 5;
+    var Currency = 'bwp';
+    var Description = 'test';
+    var StripeAccountCountry = 'Botswana';
+    var shoppingcartitems = @Model.ShoppingCart.ShoppingCartItems;
+
+     var totalAmount = @Model.ShoppingCartTotal.ToString();
+     console.log(totalAmount);
+    var AmountFormated = formatPrice(TotalAmount, Currency);
+    console.log( AmountFormated);
+    var stripeElements = stripe.elements();
+
+    var mainElement = document.getElementById('main');
+
+    //BEGIN Subscriptions with Card Element
+    var paymentButton = document.getElementById('paymentButton');
+    paymentButton.value = 'Subscribe ' + AmountFormated;
+    var styleCard = {
+        base: {
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+                color: '#aab7c4'
+            }
+        },
+        invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+        }
+    };
+    var card = stripeElements.create('card', { style: styleCard });
+    var cardElement = document.getElementById('card-element');
+    card.mount(cardElement);
+    card.addEventListener('change', function (event) {
+        if (event.error) {
+            errorMessage(event.error.message);
+        } else {
+            errorMessage('', false);
+        }
+    });
+    jQuery("form").submit(function (e) {
+        e.preventDefault();
+        paymentButton.disabled = true;
+
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
+        var billing_details =
+        {
+            name: name,
+            email: email,
+        };
+
+        if (name !== '' && email !== '') {
+            if (!email.match(mailformat)) {
+                errorMessage('Please enter a valid email address.');
+            }
+            else {
+                if (card._empty === false && card._complete === true) {
+                    errorMessage('', false);
+                    paymentButton.value = 'Processing...';
+
+                    stripe.createPaymentMethod({ type: 'card', card: card, billing_details: billing_details, })
+                        .then((result) => {
+                            if (result.error) {
+                                errorMessage(result);
+                            } else {
+                                createSubscription(billing_details, result.paymentMethod.id, shoppingcartitems, Quantity);
+                            }
+                        });
+                }
+                else {
+                    errorMessage('Your card is incomplete.');
+                    cardElement.classList.add('StripeElement--invalid');
+                }
+            }
+        }
+    });
+    //END Subscriptions with Card Element
+
+  
+
+    //Load the main subscriptions form
+        mainElement.className = "subscriptions";
+
+    //BEGIN Subscription Functions
+    function createSubscription(billing_details, paymentMethodId, shoppingcartitems, quantity) {
+        loadingScreen(true);
+        $.ajax({
+            type: "POST",
+            url: "/CheckoutApi/SubscriptionCreateHandler",
+            cache: false,
+            data: {
+                "Name": billing_details.name,
+                "Email": billing_details.email,
+                "PaymentMethodId": paymentMethodId,
+                "ShoppingCartitems": shoppingcartitems,
+                "Quantity": quantity,
+            },
+            dataType: "json",
+            success: function (response) {
+                response = JSON.parse(response);
+                handlePaymentThatRequiresCustomerAction(response, paymentMethodId);
+            },
+            error: function (response) {
+                var exception = JSON.parse(response.responseText);
+                errorMessage(exception);
+            },
+        })
+    }
+    function handlePaymentThatRequiresCustomerAction(subscription, paymentMethodId) {
+        if (subscription && subscription.status === 'active') {
+            onSubscriptionComplete(subscription);
+        }
+
+        let paymentIntent = subscription.latest_invoice.payment_intent;
+
+        if (paymentIntent.status === 'requires_action') {
+            return stripe
+                .confirmCardPayment(paymentIntent.client_secret, { payment_method: paymentMethodId, })
+                .then((result) => {
+                    if (result.error) {
+                        errorMessage(result.error.message);
+                    } else {
+                        if (result.paymentIntent.status === 'succeeded') {
+                            onSubscriptionComplete(subscription);
+                        }
+                    }
+                })
+                .catch((error) => {
+                    errorMessage(error);
+                });
+        } else {
+
+        }
+    }
+    function onSubscriptionComplete(subscription) {
+        $.ajax({
+            type: "POST",
+            url: "/checkoutapi/SubscriptionRetrieveHandler",
+            cache: false,
+            data: {"subscriptionId": subscription.id },
+            dataType: "json",
+            success: function (response) {
+                response = JSON.parse(response);
+                if (response.status === 'active') {
+                    loadingScreen(false);
+                    mainElement.className = "success";
+                    document.getElementById('pInvoice').innerText = "Invoice : " + response.LatestInvoiceId;
+                    document.getElementById('pCustomer').innerText = "Customer: " + response.CustomerId;
+                }
+                else {
+                    errorMessage("Payment declined, please try again.")
+                }
+                paymentButton.disabled = false;
+            },
+            error: function (response) {
+                var exception = JSON.parse(response.responseText);
+                errorMessage(exception);
+            }
+        });
+    }
+    //END Subscription Functions
+
+    var cardErrors = document.getElementById('card-errors');
+    function errorMessage(error, visible) {
+        if (visible == false) {
+            cardErrors.classList.remove('visible');
+            cardErrors.textContent = '';
+        }
+        else {
+            paymentButton.value = 'Subscribe ' + AmountFormated + totalAmount ;
+            cardErrors.textContent = error;
+            cardErrors.classList.add('visible');
+            paymentButton.disabled = false;
+        }
+        loadingScreen(false);
+    }
+
+    function formatPrice(amount, currency) {
+        let price = (amount / 100).toFixed(2);
+        let numberFormat = new Intl.NumberFormat(['en-US'], {
+            style: 'currency',
+            currency: currency,
+            currencyDisplay: 'symbol',
+        });
+        return numberFormat.format(price);
+    }
+
+    var mailformat = '[-0-9a-zA-Z.+_]+@@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}';
+
+    var progress = document.getElementById('Progress');
+    var progressBackground = document.getElementById('ProgressBackground');
+    function loadingScreen(visible) {
+        if (visible) {
+            progress.style.display = 'block';
+            progressBackground.style.display = 'block';
+        }
+        else {
+            progress.style.display = 'none';
+            progressBackground.style.display = 'none';
+        }
+    }
+    </script>
+
+
+
+
+
+
+

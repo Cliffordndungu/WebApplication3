@@ -1,0 +1,81 @@
+﻿<div class="removeboxbody">
+
+      <h1>Remove Licenses</h1>
+      <p>
+
+        Decrease your total license quantity to remove licenses from this subscription. To increase your license quantity. buy licenses
+      </p>
+        <form id="removeLicensesForm">
+            <div class="form-group">
+                <h4>Current quantity</h4>
+                <label for="currentQuantity">Total licenses</label>
+                <input type="text" id="currentQuantity" value="@Model.quantity" disabled>
+            </div>
+            <div class="form-group">
+                <label for="monthlyCost">Monthly cost</label>
+                <input type="text" id="monthlyCost" value="@Model.unitamount" disabled>
+            </div>
+            <div class="form-group">
+                <h4>New Quantity</h4>
+                <label for="newQuantity">Total licenses</label>
+                <input type="number" id="newQuantity" min="1" placeholder="Enter new quantity">
+            </div>
+            <div class="form-group">
+                <label for="newMonthlyCost">New Monthly Cost</label>
+                <input type="number" id="newMonthlyCost" min="0" placeholder="Enter new monthly cost">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save">
+            </div>
+    </form>
+
+
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var subitemid = '@Model.subitemid'; // Injecting username into JavaScript
+
+        let buyLicensesForm = document.querySelector('#removeLicensesForm');
+        buyLicensesForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission behavior
+
+            // Retrieve form data and handle form submission as needed
+            let newQuantity = document.querySelector('#newQuantity').value;
+
+            UpdateSubscription(subitemid, newQuantity);
+        });
+
+        function UpdateSubscription(subitemid, quantity) {
+            // Your AJAX request remains unchanged
+            $.ajax({
+                type: "POST",
+                url: "/Sub/RemoveLicenseHandler",
+                cache: false,
+                data: {
+                    "Subid": subitemid,
+                    "Quantity": quantity,
+                },
+                dataType: "json",
+                success: function (response) {
+
+                    window.location.href = "/Order/CompleteOrder";
+                },
+                error: function (response) {
+                    console.log("Payment error");
+                    errorMessage(JSON.parse(response.responseText));
+                },
+            });
+            // ... (Your existing UpdateSubscription function code here)
+        }
+
+        function errorMessage(exception) {
+            // Handle error messages appropriately
+            // ... (Your existing errorMessage function code here)
+        }
+    });
+</script>

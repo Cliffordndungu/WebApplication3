@@ -1,0 +1,85 @@
+﻿@model Subscriptions
+
+@{
+    ViewData["Title"] = "Manager your subscription";
+}
+
+<partial name="_BuyBox.cshtml" />
+<partial name="_RemoveBox.cshtml" />
+<partial name="_EditRecurringBilling.cshtml" />
+<partial name="_EditPaymentMethods.cshtml" />
+<partial name="_EditFrequency.cshtml" />
+<partial name="_CancelSubscription.cshtml" />
+
+<div class="managesubscription-container">
+    <div class="subscription-section product-info">
+        <h4>@Model.name</h4>
+        <p></p>
+        <p>Licenses aquired: @Model.quantity</p>
+        <button class="btn btn-outline-success my-2 my-sm-0" id="buybox">
+           Buy License
+        </button>
+
+        <button class="btn btn-outline-success my-2 my-sm-0" id="removebox">
+           Remove License
+        </button>
+      
+    </div>
+
+    <div class="subscription-section billing-info">
+        <h4>Subscription and payment settings</h4>
+        <p></p>
+        <p>Billing Interval: @Model.interval</p>
+        <p>Subscription Status: @Model.status</p>
+        <button class="btn btn-outline-success my-2 my-sm-0" id="cancelbox">
+            Cancel Subscription
+        </button>
+        <button class="btn btn-outline-success my-2 my-sm-0" id="editfrequencybox">
+           Edit billing frequency
+        </button>
+        <button class="btn btn-outline-success my-2 my-sm-0" id="editpaymentbox">
+            Edit Payment Method
+        </button>
+        <button class="btn btn-outline-success my-2 my-sm-0" id="editrecurringbillingbox">
+            Edit Recurring Billing
+        </button>
+        
+    </div>
+
+    <div class="subscription-section purchase-info">
+        <h4>Purchase Information</h4>
+        <p></p>
+        <p>Unit Amount: @Model.unitamount</p>
+        <p>Start Date: @Model.startdate</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('#buybox').addEventListener('click', function () {
+            document.querySelector('.buyboxbody').classList.add('active');
+        });
+
+        document.querySelector('#removebox').addEventListener('click', function () {
+            document.querySelector('.removeboxbody').classList.add('active');
+        });
+
+        document.querySelector('#editrecurringbillingbox').addEventListener('click', function () {
+            document.querySelector('.editrecurringbillingboxbody').classList.add('active');
+        });
+
+        document.querySelector('#editpaymentbox').addEventListener('click', function () {
+            document.querySelector('.editpaymentboxbody').classList.add('active');
+        });
+
+        document.querySelector('#editfrequencybox').addEventListener('click', function () {
+            document.querySelector('.editfrequencyboxbody').classList.add('active');
+        });
+
+        document.querySelector('#cancelbox').addEventListener('click', function () {
+            document.querySelector('.cancelboxbody').classList.add('active');
+        });
+    });
+</script>
+
+

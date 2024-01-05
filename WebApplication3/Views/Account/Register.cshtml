@@ -1,0 +1,177 @@
+﻿@using WebApplication3.Data.ViewModels;
+@using WebApplication3.Data.Enums;
+@model RegisterVM;
+
+
+@{
+    ViewData["Title"] = "Sign up for new account";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-3">
+
+        <p>
+            <h4>
+                Sign up for new account. 
+            </h4>
+        </p>
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="col-md-12 alert-danger">
+                <span><b>Sorry!</b> - @TempData["Error"]</span>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <form asp-action="Register">
+                    <div asp-validation-summary="ModelOnly" class="text-danger">
+                    </div>
+                    <div ckass="form-group">
+                        <label asp-for="fullname" class="control-label"></label>
+                        <input asp-for="fullname" class="form-control" />
+                        <span asp-validation-for="fullname" class="text-danger">
+                        </span>
+                    </div>
+                    <div ckass="form-group">
+                        <label asp-for="companyname" class="control-label"></label>
+                        <input asp-for="companyname" class="form-control" />
+                      
+                        </span>
+                    </div>
+                    <div ckass="form-group">
+                        <label asp-for="emailaddress" class="control-label"></label>
+                        <input asp-for="emailaddress" class="form-control" />
+                        <span asp-validation-for="emailaddress" class="text-danger">
+                        </span>
+                    </div>
+                    <!-- Add a section for phone number verification -->
+                    <div class="form-group">
+                        <label asp-for="phoneNumber">Phone Number</label>
+                        <input type="tel" asp-for="phoneNumber" id="phoneNumber" class="form-control" />
+                        <button id="sendVerificationCode" class="btn btn-primary mt-2">Send Verification Code</button>
+                        <input type="text" id="verificationCode" class="form-control mt-2" placeholder="Enter Verification Code" />
+                    </div>
+
+                    <div ckass="form-group">
+                        <label asp-for="SelectedLocation" class="control-label"></label>
+                        <select asp-for="SelectedLocation" class="form-control">
+                            @foreach (var location in Enum.GetValues(typeof(DataCenterLocation)))
+                            {
+                                <option value="@location">@location</option>
+                            }
+                        </select>
+                    </div>
+                    <div ckass="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input id="Password" asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger">
+                        </span>
+                    </div>
+                    <div ckass="form-group">
+                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                        <input id="ConfirmPassword" asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger">
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <input id="registerBtn" class="btn btn-outline-success float-right" type="submit" value="Sign Up" />
+                        <a class="btn btn-outline-secondary"  asp-controller="Product" asp-action="Index">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        let phoneNumberInput = document.querySelector('#phoneNumber');
+        let verificationCodeInput = document.querySelector('#verificationCode');
+        let passwordInput = document.querySelector('#Password');
+        let confirmPasswordInput = document.querySelector('#ConfirmPassword');
+        let verificationBtn = document.querySelector('#sendVerificationCode');
+        let registerBtn = document.querySelector('#registerBtn');
+        let serviceSid;
+      
+        // Disable fields initially
+        verificationBtn.disabled = true;
+        verificationCodeInput.disabled = true;
+        passwordInput.disabled = true;
+        confirmPasswordInput.disabled = true;
+        registerBtn.disabled = true;
+        //
+        function formatPhoneNumber() {
+            const countryCode = '+267';
+            return countryCode + phoneNumberInput.value.trim();
+        }
+        
+
+        phoneNumberInput.addEventListener('input', function () {
+            const phoneNumber = this.value.trim();
+         
+            // Enable verification button if phone number is valid (8 digits and starts with 7)
+            if (/^7\d{7}$/.test(phoneNumber)) {
+                verificationBtn.disabled = false;
+            } else {
+                verificationBtn.disabled = true;
+            }
+        });
+
+        verificationBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            verificationCodeInput.disabled = false;
+            const phoneNumberWithCountryCode = formatPhoneNumber()
+            // Replace this AJAX request with your Twilio code generation and sending logic
+            // Upon successful sending of verification code, enable verification input
+            // Example AJAX request structure (replace with Twilio integration logic)
+            $.ajax({
+                type: "POST",
+                url: "/Account/PhoneNumberVerificationHandler",
+                data: {
+                    phoneNumber: phoneNumberWithCountryCode
+                },
+                success: function (response) {
+                    // On successful response from Twilio, enable verification input
+                   //store ServiceSid
+                   serviceSid = response.service;
+                    console.log(response.service);
+                },
+                error: function () {
+                    // Handle error cases if sending verification fails
+                    console.log("Error verification code");
+                }
+            });
+        });
+
+        verificationCodeInput.addEventListener('input', function () {
+            const enteredCode = this.value.trim();
+            if (enteredCode.length === 6) {
+                
+                const phoneNumberWithCountryCode = formatPhoneNumber();
+            $.ajax({
+                type: "GET",
+                url: "/Account/PhoneNumberVerificationCheckHandler",
+                data: {
+                    phoneNumber: phoneNumberWithCountryCode,
+                    code: enteredCode,
+                    serviceSid: serviceSid // Pass the stored serviceSid here
+                },
+                success: function (response) {
+                    // Enable password fields and register button upon correct verification code
+                    passwordInput.disabled = false;
+                    confirmPasswordInput.disabled = false;
+                    registerBtn.disabled = false;
+                },
+                error: function () {
+                    console.log("Error verifying code");
+                }
+            });
+           }
+
+        });
+
+      
+    });
+</script>

@@ -1,0 +1,95 @@
+﻿@model List<Subscriptions> 
+
+
+    <h1>Billing</h1>
+<a href="#" onclick="showContent('subscriptions')">Subscriptions  |  </a>
+<a href="#" onclick="showContent('licenses')">Licenses  |  </a>
+<a href="#" onclick="showContent('payment')"> Payment Methods</a>
+
+<!-- Container to display different content -->
+<div class="billingcontainer" id="subscriptionsContent">
+    <!-- Content for Subscriptions -->
+    <h2>Subscriptions </h2>
+    <div class="scrollable-list">
+        @foreach (var subscription in Model)
+        {
+            <div class="subscription-item">
+
+
+
+                <div class="subscription-details">
+                    <p>Subscription ID: <span class="subscription-id">@subscription.id</span></p>
+                    <p>Product Name: <span class="product-name">@subscription.name</span></p>
+                    <p>License Quantity: <span class="renewal-date">@subscription.quantity</span></p>
+                    <p>Renewal Date: <span class="renewal-date">@subscription.renewaldate</span></p>
+                    <p>Status: <span class="renewal-date">@subscription.status</span></p>
+
+
+                </div>
+                <div class="subscription-actions">
+                    <a class="btn btn-outline-primary float-right" asp-action="Manage" asp-route-id="@subscription.id">
+                        <i class="bi bi-eye-fill"></i> Manage Subscription
+                    </a>
+                   
+                </div>
+
+
+            </div>
+        }
+    </div>
+
+    <script>
+        function cancelSubscription(subId) {
+            // Send an AJAX request to the server
+            $.ajax({
+                type: 'POST',
+                url: '/Sub/CancelSubscription',
+                data: { subid: subId },
+                success: function (result) {
+                    // Handle success response if needed
+                    // For example, you can refresh the subscription list after cancellation
+                    location.reload(); // Reload the page
+                },
+                error: function (error) {
+                    // Handle error response if needed
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+    </script>
+
+
+</div>
+
+<div class="billingcontainer hidden" id="licensesContent">
+    <!-- Content for Licenses -->
+    <h2>Licenses</h2>
+    <p>This is the content for Licenses.</p>
+</div>
+
+<div class="billingcontainer hidden" id="paymentContent">
+    <!-- Content for Payment Methods -->
+    <h2>Payment Methods</h2>
+    <p>This is the content for Payment Methods.</p>
+</div>
+
+<script>
+    function showContent(contentId) {
+        // Hide all content containers
+        const containers = document.querySelectorAll('.billingcontainer');
+        containers.forEach(container => {
+            container.classList.add('hidden');
+        });
+
+        // Display the selected content container
+        const selectedContent = document.getElementById(contentId + 'Content');
+        if (selectedContent) {
+            selectedContent.classList.remove('hidden');
+        }
+    }
+</script>
+   
+
+
+

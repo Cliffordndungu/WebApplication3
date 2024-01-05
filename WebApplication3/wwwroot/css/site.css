@@ -1,0 +1,607 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+ .user-img{
+width: 50px;
+border-radius:100%;
+border: 1px solid #eee;
+ }
+
+ .sidebar {
+     position: absolute;
+     top:0;
+     left:0;
+     height:100vh;
+     width:80px;
+     background-color: #BEBEBE;
+     padding:.4rem .8rem;
+     transition: all 0.5s ease;
+ }
+
+ .sidebar.active ~ .main-content {
+     left:250px;
+     width: calc(100% -250px);
+ }
+
+ .sidebar.active{
+     width:250px;
+
+ }
+
+ .sidebar #btn {
+     position: absolute;
+     color: #000;
+     top:.4rem;
+     left:50%;
+     font-size:1.2rem;
+     line-height:50px;
+     transform: translateX(-50%);
+     cursor: pointer;
+ }
+
+ .sidebar.active #btn{
+     left:90%;
+ }
+
+ .sidebar .top .logo {
+     color: #fff;
+     display:flex;
+     height:50px;
+     width:100%;
+     align-items:center;
+     pointer-events:none;
+     opacity:0;
+ }
+
+
+ .sidebar .active .top .logo {
+     opacity:1;
+ }
+
+ .top .logo i {
+     font-size:2rem;
+     margin-right:5px;
+ }
+
+ .user {
+     display:flex;
+     align-items:center;
+     margin:1rem 0;
+ }
+
+ .user p {
+     color: #000;
+     opacity:1;
+     margin-left: 1rem;
+ }
+
+ .bold {
+     font-weight: 600;
+ }
+
+ .sidebar p {
+     opacity: 0;
+ }
+ .sidebar.active p{
+     opacity: 1;
+ }
+
+.sidebar ul li {
+    position: relative;
+    list-style-type: none;
+    height: 50px;
+    width: 90px;
+    margin: 0.8rem auto;
+    line-height: 50px;
+    overflow: hidden;
+}
+
+ .sidebar ul li a{
+     color:#fff;
+     display:flex;
+     align-items:center;
+     text-decoration: none;
+     border-radius: 0.8rem;
+ }
+
+ .sidebar ul li a:hover{
+     background-color: #fff;
+     color: #BEBEBE;
+ }
+
+ .sidebar ul li a i {
+     min-width: 50px;
+     text-align: center;
+     height:50px;
+     border-radius: 12px;
+     line-height: 50px;
+ }
+
+    /* Hide text by default */
+    .sidebar ul li a .nav-item {
+        opacity: 0;
+        transition: opacity 0.3s ease; /* Add transition for smooth effect */
+    }
+
+/* Show text when sidebar is active */
+.sidebar.active ul li a .nav-item {
+    opacity: 1;
+}
+
+ .sidebar.active .nav-item{
+     opacity: 1;
+ }
+
+ .sidebar ul li .tooltip {
+     position:absolute;
+     left: 125px;
+     top: 50%;
+     transform: translate(-50%, -50%);
+     box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.2);
+     border-radius: .6rem;
+     padding: .4rem 1.2rem;
+     line-height: 1.8rem;
+     z-index: 20;
+     opacity:0;
+ }
+
+.sidebar ul li:hover .tooltip {
+    opacity: 1;
+}
+
+.sidebar.active ul li .tooltip{
+    display: none;
+}
+
+.main-content {
+    position: relative;
+    background-color: #eee;
+    min-height: 100vh;
+    top: 0;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 0;
+}
+
+
+.scrollable-list {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.subscription-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.subscription-details {
+    flex: 1;
+}
+
+.subscription-actions button {
+    margin-left: 10px;
+}
+
+.trial-box {
+    position: absolute;
+    top: 20px; /* Adjust the top position as needed */
+    right: 20px; /* Adjust the right position as needed */
+    background-color: #f0f0f0; /* Background color of the box */
+    padding: 10px; /* Adjust padding as needed */
+    border: 1px solid #ccc; /* Border styling */
+    border-radius: 5px; /* Border radius for rounded corners */
+}
+
+    .trial-box p {
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .trial-box button {
+        padding: 8px 16px;
+        background-color: #007bff; /* Button background color */
+        color: #fff; /* Button text color */
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        /* Add other button styles as needed */
+    }
+
+.trialcard {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 500px;
+    background-color: #fff;
+    height: 100vh;
+    transition: 0.5s;
+    z-index: 1000;
+}
+
+.active .trialcard {
+    left: calc(100% - 500px);
+}
+
+
+.trialcard h1 {
+    color: #333333;
+    font-weight: 100;
+    margin: 0;
+    padding: 0 20px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.trialcard .checkOut {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+    .trialcard .checkOut div {
+        background-color: #FFA07A;
+        width: 100%;
+        height: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .trialcard .checkOut div:nth-child(2) {
+            background-color: #1C1F25;
+            color: #fff;
+
+        }
+
+
+.trialbody {
+    background-color: #E3E7E8;
+    font-family: system-ui;
+}
+
+.trialcard .product-info {
+    margin-bottom: 20px;
+}
+
+    .trialcard .product-info h2 {
+        margin-top: 0;
+    }
+
+    .trialcard .product-info p {
+        margin: 5px 0;
+    }
+
+    .trialcard .product-info .confirm-btn {
+        padding: 10px 20px;
+        font-weight: bold;
+        background-color: #1C1F25;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+.trialcard .terms-conditions {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+    .trialcard .terms-conditions h3 {
+        margin-top: 0;
+    }
+
+    .trialcard .terms-conditions p {
+        margin: 5px 0;
+    }
+
+.billingcontainer {
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.managesubscription-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.subscription-section {
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.billing-info,
+.purchase-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.editrecurringbillingboxbody {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 500px;
+    background-color: #fff;
+    height: 100vh;
+    transition: 0.5s;
+    z-index: 1000;
+}
+
+    .editrecurringbillingboxbody.active {
+        left: calc(100% - 500px);
+    }
+.editpaymentboxbody {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 500px;
+    background-color: #fff;
+    height: 100vh;
+    transition: 0.5s;
+    z-index: 1000;
+}
+
+    .editpaymentboxbody.active {
+        left: calc(100% - 500px);
+    }
+.editfrequencyboxbody {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 500px;
+    background-color: #fff;
+    height: 100vh;
+    transition: 0.5s;
+    z-index: 1000;
+}
+
+    .editfrequencyboxbody.active {
+        left: calc(100% - 500px);
+    }
+.cancelboxbody {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 500px;
+    background-color: #fff;
+    height: 100vh;
+    transition: 0.5s;
+    z-index: 1000;
+}
+
+    .cancelboxbody.active {
+        left: calc(100% - 500px);
+    }
+
+.removeboxbody {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 500px;
+    background-color: #fff;
+    height: 100vh;
+    transition: 0.5s;
+    z-index: 1000;
+}
+
+    .removeboxbody.active {
+        left: calc(100% - 500px);
+    }
+
+
+.buyboxbody {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 500px;
+    background-color: #fff;
+    height: 100vh;
+    transition: 0.5s;
+    z-index: 1000;
+}
+
+    .buyboxbody.active {
+        left: calc(100% - 500px);
+    }
+
+
+.buyboxbody h1 {
+    color: #333333;
+    font-weight: 100;
+    margin: 0;
+    padding: 0 20px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.buyboxbody .checkOut {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+    .buyboxbody .checkOut div {
+        background-color: #FFA07A;
+        width: 100%;
+        height: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .buyboxbody .checkOut div:nth-child(2) {
+            background-color: #1C1F25;
+            color: #fff;
+        }
+
+
+.buyboxbody {
+    background-color: #E3E7E8;
+    font-family: system-ui;
+}
+
+    .buyboxbody .product-info {
+        margin-bottom: 20px;
+    }
+
+.buyboxbody .product-info h2 {
+    margin-top: 0;
+}
+
+        .buyboxbody.product-info p {
+            margin: 5px 0;
+        }
+
+        .buyboxbody .product-info .confirm-btn {
+            padding: 10px 20px;
+            font-weight: bold;
+            background-color: #1C1F25;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+    .buyboxbody .terms-conditions {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+        .buyboxbody .terms-conditions h3 {
+            margin-top: 0;
+        }
+
+        .buyboxbody .terms-conditions p {
+            margin: 5px 0;
+        }
+
+
+/* Add this CSS to your existing style.css or create a new CSS file */
+.profile-container {
+    display: flex;
+    margin-top: 20px;
+}
+
+.profile-sidebar {
+    flex: 0 0 20%; /* Adjust the width as needed */
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+.profile-btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+    .profile-btn:hover {
+        background-color: #bbb;
+    }
+
+.profile-details,
+.billing-contacts {
+    flex: 0 0 40%; /* Adjust the width as needed */
+    padding: 20px;
+    margin-left: 20px; /* Adjust spacing between containers */
+    background-color: #f9f9f9;
+}
+
+    .profile-details h2,
+    .billing-contacts h2 {
+        margin-bottom: 15px;
+    }
+
+
+/* Styling for Notifications and Password & Security containers */
+.notifications-container,
+.password-security-container {
+    flex: 0 0 40%; /* Adjust the width as needed */
+    padding: 20px;
+    margin-left: 20px; /* Adjust spacing between containers */
+    background-color: #f9f9f9;
+}
+
+.email-list {
+    list-style: none;
+    padding: 0;
+}
+
+    .email-list li {
+        margin-bottom: 8px;
+    }
+
+.hidden {
+    display: none;
+}
+
+.ChangePasswordbody {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 500px;
+    background-color: #fff;
+    height: 100vh;
+    transition: 0.5s;
+    z-index: 1000;
+}
+
+    .ChangePasswordbody.active {
+        left: calc(100% - 500px);
+    }

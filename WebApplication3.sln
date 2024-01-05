@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication3", "WebApplication3\WebApplication3.csproj", "{FBD7161B-403A-4081-868E-F169D617F0E2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StripeWebApp", "..\..\..\Downloads\codecanyon-zEWV7TXR-stripe-subscriptions-in-aspnet-core-mvc-web-application-built-with-c-and-javascript\StripeWebApp\StripeWebApp.csproj", "{2350A3EF-DF23-42E8-AE1D-DD7B8AB39667}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBD7161B-403A-4081-868E-F169D617F0E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD7161B-403A-4081-868E-F169D617F0E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD7161B-403A-4081-868E-F169D617F0E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD7161B-403A-4081-868E-F169D617F0E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2350A3EF-DF23-42E8-AE1D-DD7B8AB39667}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2350A3EF-DF23-42E8-AE1D-DD7B8AB39667}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2350A3EF-DF23-42E8-AE1D-DD7B8AB39667}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2350A3EF-DF23-42E8-AE1D-DD7B8AB39667}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6DBA8FE2-7AEB-4DF1-B912-ACC8FA897ACB}
+	EndGlobalSection
+EndGlobal

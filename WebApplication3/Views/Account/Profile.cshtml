@@ -1,0 +1,78 @@
+﻿@inject UserManager<ApplicationUser> UserManager;
+<partial name="ChangePassword.cshtml" />
+<div class="profile-container">
+    <div class="profile-sidebar">
+        <!-- Buttons on the left -->
+        <button class="profile-btn" onclick="showContent('profile')">Account Settings</button>
+        <button class="profile-btn" onclick="showContent('notifications')">Notifications</button>
+        <button class="profile-btn" onclick="showContent('subscriptions')">Subscriptions</button>
+        <button class="profile-btn" onclick="showContent('passwordSecurity')">Password & Security</button>
+    </div>
+
+    <div class="profile-content" id="profileContent">
+        <div class="profile-details">
+            <!-- Container for profile details -->
+            <h2>Profile Details</h2>
+            <!-- Add your profile information here -->
+            <p>Name: @UserManager.GetUserName(User)</p>
+            <p>Email: example@example.com</p>
+            <!-- Add more details as needed -->
+        </div>
+        <div class="billing-contacts">
+            <!-- Container for billing contacts -->
+            <h2>Billing Contacts</h2>
+            <!-- Add billing contact information here -->
+            <p>Name: Details</p>
+            <p>Email: Details</p>
+            <!-- Add more billing contact details as needed -->
+        </div>
+    </div>
+
+    <div class="profile-content hidden" id="notificationsContent">
+        <!-- Content for Notifications -->
+        <div class="notifications-container">
+            <h2>Notifications</h2>
+            <h3>Report Notifications</h3>
+            <button onclick="addNotification()">Add/Edit</button>
+            <ul class="email-list">
+                <!-- List of email addresses -->
+                <li>example1@example.com</li>
+                <li>example2@example.com</li>
+                <!-- Add more email addresses here -->
+            </ul>
+        </div>
+    </div>
+
+    <div class="profile-content hidden" id="passwordSecurityContent">
+        <!-- Content for Password & Security -->
+        <div class="password-security-container">
+            <h2>Password & Security</h2>
+            <a href="#" onclick="changePassword()" id="ChangePassword">Change Password</a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function showContent(contentId) {
+        // Hide all content containers except profile details and billing contacts
+        const containers = document.querySelectorAll('.profile-content');
+        containers.forEach(container => {
+            container.classList.add('hidden');
+        });
+
+        // Display the selected content container
+        const selectedContent = document.getElementById(contentId + 'Content');
+        if (selectedContent) {
+            selectedContent.classList.remove('hidden');
+        }
+    }
+
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('#ChangePassword').addEventListener('click', function () {
+            document.querySelector('.ChangePasswordbody').classList.add('active');
+            });
+
+        });
+
+</script>

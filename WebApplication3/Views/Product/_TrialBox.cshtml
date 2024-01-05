@@ -1,0 +1,122 @@
+﻿@model List<WebApplication3.Models.Product>
+@using Microsoft.Extensions.Options;
+@inject IOptions<WebApplication3.Data.Stripe.StripeSettings> StripeSettings
+@inject UserManager<ApplicationUser> UserManager;
+@using Stripe;
+@using Stripe.Checkout;
+
+@{
+    string userId = UserManager.GetUserId(User); // Get the current user's ID
+    ApplicationUser user = await UserManager.FindByIdAsync(userId); // Retrieve the ApplicationUser
+
+    // Check if the user's trial has ended and they are not subscribed to the current product using Stripe API
+    bool showPartial = false;
+
+    if (user != null && user.TrialEndDate == null)
+    {
+        DateTimeOffset thirtyDaysFromToday = DateTimeOffset.UtcNow.AddDays(30);
+        string formattedTrialEndDate = thirtyDaysFromToday.ToString("yyyy-MM-dd"); // Format trial end date
+        
+        long unixTimestamp = (long)(thirtyDaysFromToday.ToUnixTimeSeconds());
+        string formattedUnixTimestamp = unixTimestamp.ToString();
+        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
+        DateTime dateTimeUtc = dateTimeOffset.UtcDateTime;
+
+
+        showPartial = true;
+        
+        <script>
+            var username = '@user.UserName'; // Injecting username into JavaScript
+           
+        </script>
+
+
+        //// The trial has ended. Now check if the user is subscribed to a specific product in Stripe.
+        //var stripeCustomerId = user.stpcustomerid;
+
+        //// Initialize Stripe configuration with your API key
+        //StripeConfiguration.ApiKey = StripeSettings.Value.SecretKey; // Use your secret key here
+
+        //// Retrieve the subscriptions for the customer from Stripe
+        //var service = new SubscriptionService();
+        //var options = new SubscriptionListOptions
+        //        {
+        //            Customer = stripeCustomerId, // Set the customer ID
+        //            Status = "active", // You might need to refine this based on your requirements
+        //            Limit = 100 // Set an appropriate limit for the number of subscriptions to retrieve
+        //        };
+
+        //var subscriptions = service.List(options);
+
+        //foreach (var product in Model) // Assuming 'Model' is your list of products
+        //{
+        //    var subscribedProduct = subscriptions.FirstOrDefault(sub =>
+        //        sub.Items.Any(item => item.Plan.ProductId == product.productid));
+
+        //    if (subscribedProduct != null)
+        //    {
+        //        showPartial = true;
+        //        break; // Exit the loop if the user is subscribed to any product
+        //    }
+//        }
+//    }
+
+
+//    //bool showPartial = false; // Set this based on your conditions
+//}
+
+@if (showPartial)
+{
+    // Your partial view content here
+    <div class="trial-box">
+        <p>Start Free Trial</p>
+
+                <button id="openShopping">Start Free Trial</button>
+    </div>
+    <div class="trialbody">
+   
+                <div class="trialcard ">
+                   
+                    <h1>Start your Free Trial</h1>
+                    <ul class="listCard">
+                        <div class="product-info">
+                           
+                            @foreach (var product in Model)
+                            {
+                                <div class="product-info">
+                                    <h2 >@product.Name</h2>
+                                    <p id="productid">@product.productid</p>
+                                    <p>Product Name: @product.Name</p>
+                                   
+                                    <p id="priceid">@product.id</p>
+                                </div>
+                            }
+                            <p>Number of Licenses: <span class="license-count">5</span></p>
+
+                            <p>Storage : <span class="license-count">50GB</span></p>
+
+                            <p>Trial End Date: <span class="end-date" id="trialendate">@formattedTrialEndDate</span></p>
+                            <button class="confirm-btn" id="confirmButton">Confirm</button>
+                           
+                        </div>
+                        <div class="terms-conditions">
+                            <h3>Terms and Conditions</h3>
+                            <p>Your terms and conditions here...</p>
+                        </div>
+                    </ul>
+                    <div class="checkOut">
+                       
+                        <div class="closeShopping" id="closeShopping">Close</div>
+                    </div>
+                </div>
+               
+   
+            </div>
+            
+
+
+           
+
+}
+}
+}

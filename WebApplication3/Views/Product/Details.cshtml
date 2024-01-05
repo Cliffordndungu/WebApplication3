@@ -1,0 +1,166 @@
+﻿
+@model List<WebApplication3.Models.Product>
+
+@{
+    ViewData["Title"] = "Product details";
+}
+
+<partial name="_TrialBox.cshtml" />
+                    
+
+@foreach (var item in Model)
+{
+   <div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="card mb-12">
+            <div class="row g-0">
+                <div class="col-md-12">
+                    <div class="card-header text-white bg-info">
+                        <p class="card-text">
+                            <h5 class="card-title">
+                                @item.Name
+                            </h5>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src="" width="100%" alt="@item.Name">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <p class="card-text">Text</p>
+                        <p class="card-text">
+                            @*<b>Cinema: </b>
+                            <a asp-controller="Cinemas" asp-action="Details" asp-route-id="@Model.CinemaId">
+                                @Model.Cinema.Name
+                            </a>*@
+                        </p>
+                        <p class="card-text">
+                           <p class="card-text"><b>Interval: </b>Text </p>
+                           <p class="card-text"><b>Usage type: </b>Text </p>
+                          
+                           @* <b>Features: </b>
+                            <a asp-controller="Producers" asp-action="Details" asp-route-id="@Model.ProducerId">
+                                @Model.Producer.FullName
+                            </a>*@
+                        </p>
+                     
+                        <p class="card-text">
+                            <b>Fearures: </b>
+                            <hr />
+                            <div class="row">
+                                <div class="column text-center">
+
+                                    <b>Pricing</b>
+                                </div
+                            </div>
+                            <div class="row">
+                                
+                                    <div class="column ">
+                                        <div class="form-group">
+                                             <label for="numericInput">Devices:</label>
+                                                 <input type="number" class="form-control" id="numericInput" name="numericInput" value="1" />
+
+                                        </div>
+                                    </div>
+                                         @*<div class="column ">
+                                            <div class="form-group">
+                                                    <div class="form-group">
+        <label for="PageSize">Cloud Storage:</label>
+        <select id="PageSize" name="PageSize" class="form-control">
+                 <option value="size_1" data-price-id="price_1NwmttDprfyvhQjotdEyVZQF">50</option>
+        <option value="size_2" data-price-id="price_1NwmttDprfyvhQjo0xdUlMQo">100</option>
+         <option value="size_1" data-price-id="price_1NwmttDprfyvhQjobp8o8YhE">150</option>
+      
+            <option value="200">200</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="2000">2000</option>
+            <option value="3000">3000</option>
+        </select>
+    </div>
+
+                                            </div>
+                                        </div*@
+                            </div>
+                            @*<div class="row">
+                                @foreach (var actor in Model.)
+                                {
+                                        <div class="column text-center">
+                                            <img class="border-info rounded-circle" src="@actor.Actor.ProfilePictureURL" style="max-width: 150px" />
+                                            <br />
+                                            <a asp-controller="Actors" asp-action="Details" asp-route-id="@actor.ActorId">@actor.Actor.FullName</a>
+                                        </div>
+                                }
+                            </div>*@
+                        </p>
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <a class="btn btn-outline-primary float-right" asp-action="Index">
+                                Back to List
+                            </a>
+                            <a id="addToCartButton" class="btn btn-success text-white" 
+                               asp-controller="Order" 
+                               asp-action="AddItemToShoppingCart"
+                              
+                               asp-route-id="@item.productid">
+                              @* data-quantity="1" 
+                               data-totalprice="@item.unitamount"*@ 
+                               
+                               <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.price.ToString("c"))</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+@*<script>
+        function updateQuantity() {
+            var quantity = parseInt($("#numericInput").val());
+        // Update the data-quantity attribute of the addToCartButton
+        var addToCartButton = document.getElementById("addToCartButton");
+        addToCartButton.setAttribute("data-quantity", quantity);
+    }
+
+    $(document).ready(function () {
+        // Initialize Stripe
+        var stripe = Stripe('pk_test_51N9sPpDprfyvhQjoingqjh9S848PSX3p7JU9CPwHiL1AiJWZ2lonoBQuMII5zRndx5z7gT0AW2YsWxXr4VAtQogH00aWgWL8Ob');
+        // Get the price from your server-side code (e.g., Razor)
+        var productPrice = @item.price; // Replace with the correct way to get the price
+        console.log("Product Price:", productPrice); // Log the productPrice variable
+
+        // Function to update the totals and button text
+        function updateTotalsAndButton() {
+            var quantity = parseInt($("#numericInput").val());
+            console.log("Quantity:", quantity);
+
+            // Calculate the total based on the product price
+            var productTotalPrice = (productPrice / 100) * quantity;
+            console.log("Product Total Price:", productTotalPrice);
+
+            // Update the "Add to Cart" button text based on the selected total
+            $("#addToCartButton").text("Add to Cart (Price " + productTotalPrice.toFixed(2) + ")");
+        }
+
+        // Call updateTotalsAndButton initially to set the initial totals and button text
+        updateTotalsAndButton();
+
+        // Bind change events to the numeric input to update the totals and button text
+        $("#numericInput").on("change", function () {
+            updateTotalsAndButton();
+        });
+    });
+</script>*@
+
+}
+
+
+   
