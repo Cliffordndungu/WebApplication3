@@ -182,6 +182,26 @@ h2 {
     font-weight: 500;
 }
 
+/* View all payments*/
+
+.view-products .buy-btn {
+    display: inline-block;
+    padding: 12px 35px;
+    border-radius: 50px;
+    color: #47b2e4;
+    transition: none;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Jost", sans-serif;
+    transition: 0.3s;
+    border: 1px solid #47b2e4;
+}
+
+    .view-products .buy-btn:hover {
+        background: #47b2e4;
+        color: #fff;
+    }
+
 /* Payment Request */
 
 #paymentrequest {

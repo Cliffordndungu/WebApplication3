@@ -26,8 +26,12 @@ namespace WebApplication3.Controllers
                     Name = stripeProduct.Name,
                     Description = stripeProduct.Description,
                     Price = stripeProduct.Metadata.ContainsKey("price") ? Convert.ToDecimal(stripeProduct.Metadata["price"]) : 0,
-                    ImageUrl = stripeProduct.Images.FirstOrDefault()
-
+                    //ImageUrl = stripeProduct.Images.FirstOrDefault()
+                    engine = stripeProduct.Metadata.ContainsKey("Engine") ? stripeProduct.Metadata["Engine"] : null,
+                    compatibility = stripeProduct.Metadata.ContainsKey("Comp") ? stripeProduct.Metadata["Comp"] : null,
+                    subscription = stripeProduct.Metadata.ContainsKey("Subscription") ? stripeProduct.Metadata["Subscription"] : null,
+                    productcode = stripeProduct.Metadata.ContainsKey("colorcode") ? stripeProduct.Metadata["colorcode"] : null,
+                    datacenterlocation = stripeProduct.Metadata.ContainsKey("Datacenterlocation") ? stripeProduct.Metadata["Datacenterlocation"] : null,
                 };
 
                 products.Add(product);
@@ -66,7 +70,9 @@ namespace WebApplication3.Controllers
                     productid = id,
                     price = (decimal)price.UnitAmount / 100,
                     Name = productName, // Fetching the product name from StripePrice
-                    id = price.Id
+                    id = price.Id,
+                    compatibility = stripeProduct.Metadata.ContainsKey("Compatibility") ? stripeProduct.Metadata["Compatibility"] : null,
+                    Description = stripeProduct.Description 
                 };
                     productViewModels.Add(productViewModel);
                 }

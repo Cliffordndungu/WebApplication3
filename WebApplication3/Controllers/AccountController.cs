@@ -161,7 +161,7 @@ namespace WebApplication3.Controllers
 
         }
 
-        [HttpPost]
+       
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
