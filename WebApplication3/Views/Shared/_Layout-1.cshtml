@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Decisive Technologies - Index</title>
+    <title>Decisive Technologies - Home</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="~/assets/img/Decisivelogo01.png" rel="icon">
+    <link href="~/assets/img/Decisivelogo01.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -36,14 +36,20 @@
 <!-- ======= Header ======= -->
 <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center">
-
-        <h1 class="logo me-auto"><a href="index.html">Decisive Technologies</a></h1>
+        <div class="logo me-auto">
+            <a href="index.html">
+                <img src="~/assets/img/Decisivelogo01.png" alt="" class="logo-img">
+                Decisive  Technologies
+            </a>
+        </div>
+        @*<img src="~/portalassets/img/Decisivelogo.png" alt="">
+        <h1 class="logo me-auto"><a href="index.html">Decisive Technologies</a></h1>*@
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo1.png" alt="" class="img-fluid"></a>-->
 
         <nav id="navbar" class="navbar">
             <ul>
-
+               
                 <li class="dropdown">
                     <a asp-controller="Home" asp-action="Index"><span>Home</span></a>
                     <ul>
@@ -128,7 +134,13 @@
                 </li>
                 </ul>*@
                 </li>
-                <li><a class="nav-link scrollto" href="#services">About Us</a></li>
+
+              
+                <ul class="navbar-nav">
+                    @await Component.InvokeAsync("ShoppingCartSummary")
+                </ul>
+
+              @*  <li><a class="nav-link scrollto" href="#services">About Us</a></li>*@
 
                 @* <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
                 <ul>

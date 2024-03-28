@@ -112,23 +112,34 @@ h6 {
   background: rgba(40, 58, 90, 0.9);
 }
 
-#header .logo {
-  font-size: 30px;
-  margin: 0;
-  padding: 0;
-  line-height: 1;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
+    #header .logo {
+        font-family: "Nunito", sans-serif;
+        font-size: 30px;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        text-decoration: none; /* Remove underline from the link */
+        color: #fff; /* Set text color */
+    }
 
-#header .logo a {
-  color: #fff;
-}
 
-#header .logo img {
-  max-height: 40px;
-}
+        #header .logo a {
+            color: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+    #header .logo-img {
+        max-height: 50px; /* Adjust as needed */
+        margin-right: 10px; /* Adjust as needed */
+    }
+
+   
 
 /*--------------------------------------------------------------
 # Navigation Menu
@@ -504,6 +515,37 @@ h6 {
 }
 
 /*--------------------------------------------------------------
+# Get Started Section
+--------------------------------------------------------------*/
+#get-started-section {
+    width: 100%;
+    height: 80vh; /* You can adjust the height as needed */
+    background: #37517e; /* You can adjust the background color as needed */
+}
+
+#get-started-section .container {
+    padding-top: 72px; /* You can adjust the padding as needed */
+}
+
+#get-started-section .btn-get-started {
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 10px 28px 11px 28px;
+    border-radius: 50px;
+    transition: 0.5s;
+    margin: 10px 0 0 0; /* You can adjust the margin as needed */
+    color: #fff;
+    background: #47b2e4;
+}
+
+    #get-started-section .btn-get-started:hover {
+        background: #209dd8;
+    }
+
+/*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
 section {
@@ -645,26 +687,28 @@ section {
 
 /* View all products*/
 
-..view-products .btn-view-products {
+#view-products .btn-view-products {
     font-family: "Poppins", sans-serif;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     letter-spacing: 1px;
     display: inline-block;
-    padding: 12px 32px;
-    border-radius: 4px;
+    padding: 12px 35px;
+    border-radius: 50px;
     transition: background-color 0.3s, color 0.3s;
     line-height: 1;
     color: #47b2e4;
     margin-top: 20px; /* Adjust margin as needed */
     border: 2px solid #47b2e4;
     text-decoration: none; /* Ensure no underline by default */
+
 }
 
-.view-products .btn-view-products:hover {
+#view-products .btn-view-products:hover {
     background-color: #47b2e4;
     color: #fff;
 }
+
 
 
 /*--------------------------------------------------------------
@@ -1674,6 +1718,25 @@ section {
     margin: 0 auto 30px auto;
   }
 }
+
+#view-products .btn-view-products {
+    display: inline-block;
+    padding: 12px 35px;
+    border-radius: 50px;
+    color: #47b2e4;
+    transition: background-color 0.3s, color 0.3s; /* Combine transitions */
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Jost", sans-serif;
+    border: 5px solid #47b2e4;
+    text-decoration: none; /* Remove default link underline */
+}
+
+    /* Styling for hover state */
+    #view-products .btn-view-products:hover {
+        background-color: #47b2e9;
+        color: #fff;
+    }
 
 
 /*---------------------------------------------------------

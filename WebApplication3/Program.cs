@@ -14,8 +14,30 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using WebApplication3.Helpers;
 using WebApplication3.Data.Repository;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.WebHost.UseEnvironment("Development"); // Setting the environment to Development
+builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                   .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+                   .AddEnvironmentVariables();
+
+// Set the environment to Development
+builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    config.AddEnvironmentVariables();
+    if (!hostingContext.HostingEnvironment.IsDevelopment())
+    {
+        // Set the environment to Development
+        hostingContext.HostingEnvironment.EnvironmentName = "Development";
+    }
+});
+
+// Configure the default culture to Botswana Pula
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-BW");
+CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-BW");
+
 builder.Services.Configure<WebApplication3.Data.Stripe.StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 builder.Services.Configure<SMTPConfigModel>(builder.Configuration.GetSection("SMTPConfig"));
 StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:SecretKey"];
@@ -94,6 +116,6 @@ app.UseAuthorization();
 AppDbIntializer.SeedUsersAndRolesAsync(app).Wait();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Product}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

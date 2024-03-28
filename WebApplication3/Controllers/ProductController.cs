@@ -1,13 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Stripe;
+using WebApplication3.Data.Cart;
+using WebApplication3.Data.ViewModels;
 using WebApplication3.Models;
 
 namespace WebApplication3.Controllers
 {
     public class ProductController : Controller
     {
+        private readonly ShoppingCart _shoppingCart;
 
+        public ProductController(ShoppingCart shoppingCart)
+        {
+            _shoppingCart = shoppingCart;
+        }
         public async Task<IActionResult> Index()
         {
             List<Products> products = new List<Products>();
@@ -36,48 +43,48 @@ namespace WebApplication3.Controllers
 
                 products.Add(product);
             }
+            // Remove the product with the specified ID
+            products.RemoveAll(p => p.id == "prod_PgyiINyEyBPyea");
 
             return View(products);
         }
 
         public async Task<IActionResult> Details(string id)
         {
-            
-                var productService = new ProductService();
+            var items = _shoppingCart.GetShoppingCartItems();
+            _shoppingCart.ShoppingCartItems = items;
+      
+
+            bool productExists = items.Any(item => item.productid == id);
+            ViewBag.CartStatus = productExists ? new CloudStorageCartStatus { cloudstoragecart = false, cloudstoragesuscribed = false } : new CloudStorageCartStatus { cloudstoragecart = false, cloudstoragesuscribed = false };
+
+            var productService = new ProductService();
                 var stripeProduct = productService.Get(id);
+           
 
-                // Assuming ProductService.Get returns a StripeProduct
-
-                if (stripeProduct == null)
+            if (stripeProduct == null)
                 {
                     // Handle the case where the product with the given ID is not found.
                     return NotFound();
                 }
 
                 var service = new PriceService();
-                var priceoptions = new PriceListOptions
-                {
-                    Product = id,
-                };
-                var prices = await service.ListAsync(priceoptions);
-                var productName = stripeProduct.Name;
-                var productViewModels = new List<Models.Product>();
+           
+            var prices =service.Get(stripeProduct.DefaultPriceId);
+            var productName = stripeProduct.Name;
 
-                foreach (var price in prices.Data)
-                {
-                var productViewModel = new Models.Product
-                {
-                    productid = id,
-                    price = (decimal)price.UnitAmount / 100,
-                    Name = productName, // Fetching the product name from StripePrice
-                    id = price.Id,
-                    compatibility = stripeProduct.Metadata.ContainsKey("Compatibility") ? stripeProduct.Metadata["Compatibility"] : null,
-                    Description = stripeProduct.Description 
-                };
-                    productViewModels.Add(productViewModel);
-                }
+            Models.Product productViewModel = new Models.Product
+            {
+                productid = id,
+                price = (decimal)prices.UnitAmount / 100,
+                Name = productName, // Fetching the product name from StripePrice
+                id = prices.Id,
+                compatibility = stripeProduct.Metadata.ContainsKey("Compatibility") ? stripeProduct.Metadata["Compatibility"] : null,
+                Description = stripeProduct.Description
+            };
+          
 
-                return View(productViewModels);
+            return View(productViewModel);
             }
 
 
@@ -85,3 +92,57 @@ namespace WebApplication3.Controllers
     }
 
 
+//if (productExists)
+//{
+//    CartStatus.Add(new CloudStorageCartStatus
+
+//    {
+//        cloudstoragecart = true,
+//        cloudstoragesuscribed = true
+
+//    });
+
+
+
+//}
+//else
+//{
+//    CartStatus.Add(new CloudStorageCartStatus
+
+//    {
+//        cloudstoragecart = false,
+//        cloudstoragesuscribed = false
+
+//    });
+//}
+//var priceoptions = new PriceListOptions
+//{
+//    Product = id,
+//};
+
+//var prices = await service.ListAsync(priceoptions);
+
+//foreach (var price in prices.Data)
+//{
+//var productViewModel = new Models.Product
+//{
+//    productid = id,
+//    price = (decimal)price.UnitAmount / 100,
+//    Name = productName, // Fetching the product name from StripePrice
+//    id = price.Id,
+//    compatibility = stripeProduct.Metadata.ContainsKey("Compatibility") ? stripeProduct.Metadata["Compatibility"] : null,
+//    Description = stripeProduct.Description 
+//};
+//    productViewModels.Add(productViewModel);
+//}
+
+//add productviewmodels to productdetailsvm 
+
+//code to check cloudstorage
+//
+//var viewModel = new ProductDetailsVM
+//{
+//    Products = productViewModels,
+//    CartStatus = CartStatus
+
+//};

@@ -21,18 +21,18 @@ namespace WebApplication3.Controllers
 
         public async Task<ViewResult> Index()
         {
-            UserEmailOptions emailOptions = new UserEmailOptions()
-            {
-                ToEmails = new List<string>() { "cliffordndungu@hotmail.com" },
-                Placeholders = new List<KeyValuePair<string, string>>()
-                {
-                    new KeyValuePair<string, string>("{{UserName}}", "Clifford")
-                }
-            };
+            //UserEmailOptions emailOptions = new UserEmailOptions()
+            //{
+            //    ToEmails = new List<string>() { "cliffordndungu@hotmail.com" },
+            //    Placeholders = new List<KeyValuePair<string, string>>()
+            //    {
+            //        new KeyValuePair<string, string>("{{UserName}}", "Clifford")
+            //    }
+            //};
             
 
 
-            await _emailservice.SendTestEmail(emailOptions);
+            //await _emailservice.SendTestEmail(emailOptions);
             
             
             var isLoggedin = _userservice.IsAuthenticated();

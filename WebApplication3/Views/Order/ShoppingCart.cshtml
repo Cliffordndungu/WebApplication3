@@ -2,11 +2,92 @@
 @using WebApplication3.Data.ViewModels; 
 @model ShoppingCartVM
 
-@{ 
-    ViewData["Title"] = "Shopping cart summary";
+@{
+    ViewData["Title"] = "Shopping Cart Summary";
+    Layout = "~/Views/Shared/_Layout-5.cshtml";
 }
 
-<div class="row">
+
+<main id="main" class="main">
+
+
+    <div class="pagetitle">
+        <h1>Your shopping cart summary</h1>
+
+    </div><!-- End Page Title -->
+
+
+
+    <section class="section ShoppingCart">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Selected amount</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
+                {
+                    var productPrice = Model.ProductPrices.FirstOrDefault(pp => pp.ProductId == item.productid);
+                    var subtotal = (productPrice?.Price ?? 0) * item.quanitity; // Calculate the subtotal
+
+                    <tr>
+                        <td class="align-middle">@item.quanitity</td>
+                        <td class="align-middle">@item.productid</td>
+
+                        <td class="align-middle">@productPrice?.Price.ToString("c")</td>
+                        <td class="align-middle">@subtotal.ToString("c")</td>
+                        <td class="align-middle">
+                            <a class="text-danger" asp-controller="Order" asp-action="RemoveItemFromShoppingCart"
+                           asp-route-id="@item.productid">
+                                <i class="bi bi-cart-dash"></i>
+                            </a>
+                            |
+                            <a class="text-success" asp-controller="Order" asp-action="AddItemToShoppingCart"
+                           asp-route-id="@item.productid">
+                                <i class="bi bi-cart-plus"></i>
+                            </a>
+                        </td>
+
+
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <td><b>Total:</b></td>
+                    <td>
+                        @Model.ShoppingCartTotal.ToString("c")
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="text-center">
+            <div class="btn-group">
+                <a class="btn btn-outline-primary" asp-action="checkout">
+                    Complete order
+                </a>
+                <a class="btn btn-outline-success" asp-controller="Product" asp-action="Index">
+                    Add more items
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+
+</main><!-- End #main -->
+
+
+@*<div class="row">
     <div class="col-md-8 offset-2">
         <div class="text-center">
             <h2>You shopping cart summary</h2>
@@ -75,3 +156,4 @@
 
     </div>
 </div>
+*@

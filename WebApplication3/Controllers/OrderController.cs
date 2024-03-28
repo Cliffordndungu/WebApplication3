@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stripe;
@@ -25,6 +26,122 @@ namespace WebApplication3.Controllers
             _subscriptionservice = subscriptionsService;
         }
 
+        [Route("Order/ShoppingCart")]
+        [Route("Order/Cart")]
+        public async Task<IActionResult> Cart()
+
+        {
+            var items = _shoppingCart.GetShoppingCartItems();
+            _shoppingCart.ShoppingCartItems = items;
+
+            // Fetch product prices from Stripe for each item in the shopping cart
+            var service = new ProductService();
+            var priceService = new PriceService();
+
+            var productPrices = new List<ProductPrice>();
+            var productDetails = new List<ProductDetails>();
+
+            foreach (var item in items)
+            {
+
+                string productId = item.productid;
+                //if product id is ..
+
+                //check if the productid is for cloud storage
+                if (productId == "prod_PgyiINyEyBPyea")
+                {
+
+                    // Extract quantity from the shopping cart item
+                    var storage = item.quanitity;
+
+                    var options = new UpcomingInvoiceOptions
+                    {
+                        Customer = "cus_PJnTI05Yw7lNhG",
+                        SubscriptionItems = new List<InvoiceSubscriptionItemOptions>
+                                {
+                                 new InvoiceSubscriptionItemOptions
+                                 {
+                                     Price = "price_1OrakiDprfyvhQjoLmzI7dKC",
+                                      Quantity = storage,
+                                  }
+                                 }
+                    };
+
+                    var Invoiceservice = new InvoiceService();
+                    var UpcomingPrice = Invoiceservice.Upcoming(options);
+                    long totalupcomingprice = UpcomingPrice.AmountDue / 100;
+                    long unitcost = totalupcomingprice / storage;
+
+
+                    productPrices.Add(new ProductPrice
+                    {
+                        ProductId = item.productid,
+                        Price = unitcost
+                    });
+
+                    //Get productid 
+                    //var product = service.Get(productId);
+
+                    var product = service.Get(productId);
+                    if (product != null)
+                    {
+                        productDetails.Add(new ProductDetails
+
+                        {
+                            ProductId = item.productid,
+                            Productname = product.Name,
+                            Productdescription = product.Description,
+
+                        });
+
+                    }
+
+
+                }
+                else
+                {
+                    var product = service.Get(item.productid);
+                    var price = priceService.Get(product.DefaultPriceId);
+
+                    // Convert price to your desired format (e.g., currency)
+                    var formattedPrice = (price.UnitAmountDecimal ?? 0) / 100; // Convert to currency format
+
+
+                    productPrices.Add(new ProductPrice
+                    {
+                        ProductId = item.productid,
+                        Price = formattedPrice
+                    });
+
+                    if (product != null)
+                    {
+                        productDetails.Add(new ProductDetails
+
+                        {
+                            ProductId = item.productid,
+                            Productname = product.Name,
+                            Productdescription = product.Description,
+
+                        });
+
+                    }
+
+
+
+                }
+            }
+
+            var viewModel = new ShoppingCartVM
+            {
+                ShoppingCart = _shoppingCart,
+                ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotalAsync(),
+                ProductPrices = productPrices, // Pass the list of product prices to the view model
+                ProductDetails = productDetails,
+            };
+
+            return View(viewModel);
+        }
+
         public async Task<IActionResult> Index()
         {
             string userId = "";
@@ -46,6 +163,7 @@ namespace WebApplication3.Controllers
             var priceService = new PriceService();
 
             var productPrices = new List<ProductPrice>();
+            var productDetails = new List<ProductDetails>();
 
                 foreach (var item in items)
                 {
@@ -85,6 +203,23 @@ namespace WebApplication3.Controllers
                         Price = unitcost
                     });
 
+                    //Get productid 
+                    //var product = service.Get(productId);
+                  
+                var product = service.Get(productId);
+                    if (product != null)
+                    {
+                        productDetails.Add(new ProductDetails
+
+                        {
+                            ProductId = item.productid,
+                            Productname = product.Name,
+                            Productdescription = product.Description,
+
+                        });
+                       
+                    }
+
 
                 }
                 else
@@ -101,6 +236,22 @@ namespace WebApplication3.Controllers
                         ProductId = item.productid,
                         Price = formattedPrice
                     });
+
+                    if (product != null)
+                    {
+                        productDetails.Add(new ProductDetails
+
+                        {
+                            ProductId = item.productid,
+                            Productname = product.Name,
+                            Productdescription = product.Description,
+
+                        });
+
+                    }
+
+
+
                 }
                  }
 
@@ -108,32 +259,65 @@ namespace WebApplication3.Controllers
                 {
                     ShoppingCart = _shoppingCart,
                     ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotalAsync(),
-                    ProductPrices = productPrices  // Pass the list of product prices to the view model
+                    ProductPrices = productPrices, // Pass the list of product prices to the view model
+                    ProductDetails = productDetails, 
                 };
 
                 return View(viewModel);
             }
 
-        //[Route("Order/CompleteOrder")]
-        //[HttpGet("/Order/CompleteOrder")]
-        //public async Task<IActionResult> CompleteOrder()
+        public async Task<IActionResult> Failed()
+        {
+
+          
+            return View();
+        }
+        public async Task<IActionResult> Complete()
+        {
+
+            var items = _shoppingCart.GetShoppingCartItems();
+            //string userId = "test";
+            //string userEmailAddress = "";
+
+            ////await _subscriptionservice.CreateSubscriptionsAsync(userId, items);
+
+
+            ////await _orderservice.StoreOrderAsync(items, userId, userEmailAddress);
+            await _shoppingCart.ClearShoppingCartAsync();
+
+            return View();
+        }
+
+        //[HttpGet("/Order/Complete")]
+
+        //public ActionResult Complete([FromQuery] string session_id)
+        //{
+        //    var sessionService = new SessionService();
+        //    Session session = sessionService.Get(session_id);
+
+        //    var customerService = new CustomerService();
+        //    Customer customer = customerService.Get(session.CustomerId);
+
+        //    return Content($"<html><body><h1>Thanks for your order, {customer.Name}!</h1></body></html>");
+        //}
+        //public async Task<IActionResult> Complete()
         //{
 
-        //    var items = _shoppingCart.GetShoppingCartItems();
-        //    string userId = "test";
-        //    string userEmailAddress = "";
+        //    //var items = _shoppingCart.GetShoppingCartItems();
+        //    //string userId = "test";
+        //    //string userEmailAddress = "";
 
-        //    //await _subscriptionservice.CreateSubscriptionsAsync(userId, items);
-            
-            
-        //    //await _orderservice.StoreOrderAsync(items, userId, userEmailAddress);
+        //    ////await _subscriptionservice.CreateSubscriptionsAsync(userId, items);
+
+
+        //    ////await _orderservice.StoreOrderAsync(items, userId, userEmailAddress);
         //    //await _shoppingCart.ClearShoppingCartAsync();
 
-        //    return View("OrderCompleted");
+        //    return View();
         //}
 
         //[HttpGet("/Order/CompleteOrder")]
-        // public ActionResult OrderSuccess([FromQuery] string session_id)
+        //public ActionResult OrderSuccess([FromQuery] string session_id)
         //{
         //    var sessionService = new SessionService();
         //    Session session = sessionService.Get(session_id);
@@ -192,13 +376,14 @@ namespace WebApplication3.Controllers
             //return RedirectToAction(nameof(ShoppingCart));
         }
 
-
         
+
+        [Authorize]
         public ActionResult checkout()
         {
             // Fetch products and quantities from the shopping cart
             var items = _shoppingCart.GetShoppingCartItems();
-            var domain = "http://localhost:7218";
+            var domain = "https://webapplication320240320023239.azurewebsites.net/Order";
             var lineItems = new List<SessionLineItemOptions>();
 
             var productService = new ProductService();
@@ -225,15 +410,37 @@ namespace WebApplication3.Controllers
             {
                 LineItems = lineItems,
                 Mode = "subscription",
-                SuccessUrl = domain + "/success.html",
+                SuccessUrl = domain + "/Complete",
                 
-                CancelUrl = domain + "/cancel.html",
+                CancelUrl = domain + "/Failed",
             };
-            var service = new SessionService();
-            Session session = service.Create(options);
+            //var service = new SessionService();
+            //Session session = service.Create(options);
 
-            Response.Headers.Add("Location", session.Url);
-            return new StatusCodeResult(303);
+            //Response.Headers.Add("Location", session.Url);
+            //return new StatusCodeResult(303);
+
+            // Use Dependency Injection to inject
+                       //
+            // SessionService
+            var service = new SessionService();
+            try
+            {
+                Session session = service.Create(options);
+                return Redirect(session.Url); // Redirect user to Stripe checkout
+            }
+            catch (StripeException ex)
+            {
+                // Handle Stripe API errors
+                // You can log or display an error message to the user
+                return View("Error");
+            }
+            catch (Exception ex)
+            {
+                // Handle other unexpected errors
+                // You can log or display an error message to the user
+                return View("Error");
+            }
         }
     }
 }

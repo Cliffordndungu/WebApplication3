@@ -1,0 +1,14 @@
+﻿@inject UserManager<ApplicationUser> UserManager;
+
+@if (!User.Identity.IsAuthenticated)
+{
+    
+}
+else
+{
+
+    @*User profile section*@
+    <span class="d-none d-md-block dropdown-toggle ps-2">@User.FindFirst("UserFirstName").Value Test</span>
+
+
+}

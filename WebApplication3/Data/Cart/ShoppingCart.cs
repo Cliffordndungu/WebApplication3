@@ -212,6 +212,31 @@ namespace WebApplication3.Data.Cart
             return subtotal;
         }
 
+        //public async Task<string> GetProductDetails()
+        //{
+        //    var shoppingCartItems = _context.ShoppingCartItems.Where(n => n.ShoppingCartId == ShoppingCartId).ToList();
+        //    var productIds = shoppingCartItems.Select(item => item.productid).ToList();
+
+           
+        //    var productDetails = new List<(string Name, string Description)>();
+        //    var service = new ProductService();
+        //    // Fetch product details from Stripe
+        //    foreach (var productId in productIds)
+        //    {
+               
+                
+        //        var product = service.Get(productId);
+        //        if (product != null)
+        //        {
+        //            productDetails.Add((product.Name, product.Description));
+        //        }
+        //    }
+
+        //    // Now you have product details, you can return it
+        //    return productDetails;
+        //}
+    
+
         public static ShoppingCart GetShoppingCart(IServiceProvider services)
         {
             ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
@@ -286,6 +311,8 @@ namespace WebApplication3.Data.Cart
 
                 _context.ShoppingCartItems.Add(shoppingCartItem1);
 
+                if (storagequantity > 0)
+                {
                var  shoppingCartItem2 = new ShoppingCartItem()
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -296,7 +323,9 @@ namespace WebApplication3.Data.Cart
                     //quanitity = quantity
                 };
 
+
                 _context.ShoppingCartItems.Add(shoppingCartItem2);
+                }
             }
             else
             {

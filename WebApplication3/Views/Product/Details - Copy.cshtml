@@ -1,0 +1,533 @@
+﻿
+@using WebApplication3.Data.ViewModels;
+@model WebApplication3.Models.Product;
+@using WebApplication3.Data.Enums;
+
+@{
+    ViewData["Title"] = "Decisive Technologies";
+    Layout = "~/Views/Shared/_Layout-3.cshtml";
+}
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+
+
+    </div>
+</section><!-- End Breadcrumbs -->
+
+<section id="product-info" class="product-info section-bg">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="content">
+                <div class="row">
+
+                    <div class="col-lg-4 custom-padding">
+                        <div class="logo-container">
+                            <img src="~/assets/img/logo.png" alt="Product Logo" width="70" height="70">
+                        </div>
+                        <div class="text-container">
+                            <!-- Product name and small label -->
+                            <h3>@Model.Name</h3>
+                            <h6>Cloudbackup | Endpoint protection</h6>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bold text "Security. Perfomance. Privacy." -->
+                <h4><strong>Security. Perfomance. Privacy.</strong></h4>
+                <!-- Bold text "Enhance your internet security." -->
+                <h5>Enhance your internet security.</h5>
+                <!-- Three bullet points -->
+                <ul>
+                    <li>Advanced security features with anti-phishing and firewall included</li>
+                    <li>Performance tools and HDD health monitoring help devices keep up with you</li>
+                    <li>Unlimited VPN + Password Manager keep your digital life safe and private</li>
+
+
+
+
+                </ul>
+                <!-- Compatibility label -->
+                <h6>@Model.compatibility</h6>
+            </div>
+        </div>
+    </div>
+
+</section>
+<div class="checkout">
+    <div class="row featured">
+        <!-- Column 1 - Logo and Label -->
+        <div class="column single-logo">
+            <img src="~/assets/img/logo.png" alt="Logo">
+            <h3>@Model.Name</h3>
+        </div>
+
+        <!-- Column 2 - Workstations and Cloud Storage Dropdowns -->
+        <div class="column workstations-cloud">
+            <div class="workstations-dropdown">
+                <h3>Workstations</h3>
+              
+                 <div class="numeric-stepper">
+            <label for="numDevices">Devices:</label>
+            <input type="number" id="numDevices" name="numDevices" value="1" min="1" />
+        </div>
+
+            </div>
+
+            @if (ViewBag.CartStatus.cloudstoragecart != null)
+            {
+            }
+            else
+            {
+                <div class="cloud-storage-dropdown">
+                    <h3>Cloud Storage</h3>
+                    <select id="storageSelect">
+                        @{
+                            foreach (StorageSizes size in Enum.GetValues(typeof(StorageSizes)))
+                            {
+                                string sizeText = size.ToString().Replace('_', ' '); // Replace underscore with space
+                                string optionValue = sizeText.Substring(3); // Remove the "GB_" prefix
+                                <option value="@optionValue">@sizeText</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+
+        </div>
+
+        <!-- Column 3 - Price and Monthly Label -->
+        <div class="column price">
+    <h3>Price</h3>
+    <p><strong id="totalPriceDisplay"></strong> <span>monthly</span></p>
+</div>
+
+        <!-- Column 4 - Buy Now and Start Free Trial Buttons -->
+        <div class="column buttons">
+            <button id="addtoCart" class="buy-btn">Add to Cart</button>
+<!-- Column send storage and device with quantity to cart -->
+
+
+        
+            <button class="free-trial-btn">Start Free Trial</button>
+        </div>
+    </div>
+</div>
+
+<!-- ======= Services Section ======= -->
+<section id="features" class="features section-bg">
+    <div class="container features">
+
+        <div class="section-title">
+            <h2>Features</h2>
+            <p>@Model.Description</p>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch">
+                <div class="icon-box">
+
+                    <h4><a href="">Flexible data retention periods</a></h4>
+                    <p>Timeframes can be extended and adjusted any time, if required.</p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+                <div class="icon-box">
+
+                    <h4>
+                        <a href="">
+                            Cloud or on-premise backup options
+                        </a>
+                    </h4>
+                    <p>Our backup options are flexible and can be tailored to your organization’s requirements. Our cloud option sees your data efficiently backed up directly from your servers to our local and international datacenter .</p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0">
+                <div class="icon-box">
+
+                    <h4><a href="">Data encryption</a></h4>
+                    <p>For total peace of mind, we can encrypt data in transit, or at rest, meaning that any interceptions will be unsuccessful in understanding or using your data.</p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0">
+                <div class="icon-box">
+
+                    <h4><a href="">Back-Up & Disaster Recovery</a></h4>
+                    <p>Nothing is quite like peace of mind, and what better way to feel safe about your business continuity than implementing a rock-solid back-up and disaster recovery solution.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch">
+                <div class="icon-box">
+
+                    <h4><a href="">Flexible data retention periods</a></h4>
+                    <p>Timeframes can be extended and adjusted any time, if required.</p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+                <div class="icon-box">
+
+                    <h4>
+                        <a href="">
+                            Cloud or on-premise backup options
+                        </a>
+                    </h4>
+                    <p>Our backup options are flexible and can be tailored to your organization’s requirements. Our cloud option sees your data efficiently backed up directly from your servers to our local and international datacenter .</p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0">
+                <div class="icon-box">
+
+                    <h4><a href="">Data encryption</a></h4>
+                    <p>For total peace of mind, we can encrypt data in transit, or at rest, meaning that any interceptions will be unsuccessful in understanding or using your data.</p>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0">
+                <div class="icon-box">
+
+                    <h4><a href="">Back-Up & Disaster Recovery</a></h4>
+                    <p>Nothing is quite like peace of mind, and what better way to feel safe about your business continuity than implementing a rock-solid back-up and disaster recovery solution.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section><!-- End Services Section -->
+
+
+<!-- ======= Product Details Section ======= -->
+<section id="product-details" class="product-details section-bg">
+    <div class="container-fluid" data-aos="fade-up">
+
+        <div class="row">
+
+            <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
+
+                <div class="content">
+                    <h3>AVOID DOWNTIME. PROTECT DATA.<strong> IMPROVE SECURITY. REDUCE COSTS.</strong></h3>
+                    <p>
+                        Our aim is to release your team to focus on your organisation’s priorities, so our fully managed service means we’re always there to ensure peace of mind.
+                    </p>
+                </div>
+
+                <div class="accordion-list">
+                    <ul>
+                        <li>
+                            <a data-bs-toggle="collapse" class="collapse" data-bs-target="#accordion-list-1"><span>01</span> Flexible data retention periods <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                            <div id="accordion-list-1" class="collapse show" data-bs-parent=".accordion-list">
+                                <p>
+                                    We are totally flexible and can accommodate any length of retention. If you have legal retention periods or a preferred timescale we offer guidance to ensure your data remains available for as long as you need it, and is stored in the most cost-effective way. Timeframes can be extended and adjusted any time if required.
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2" class="collapsed"><span>02</span> Cloud or on-premise backup options <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                            <div id="accordion-list-2" class="collapse" data-bs-parent=".accordion-list">
+                                <p>
+                                    Our backup options are flexible and can be tailored to your organization’s requirements. Our cloud option sees your data efficiently backed up directly from your servers to our local and international datacenter.
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3" class="collapsed"><span>03</span> Data encryption <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                            <div id="accordion-list-3" class="collapse" data-bs-parent=".accordion-list">
+                                <p>
+                                    For total peace of mind, we can encrypt data in transit, or at rest, meaning that any interceptions will be unsuccessful in understanding or using your data.
+                                </p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img" style='background-image: url("assets/img/why-us.png");' data-aos="zoom-in" data-aos-delay="150">&nbsp;</div>
+        </div>
+
+    </div>
+</section>
+<!-- End Product Details Section -->
+<!-- ======= Pricing Section ======= -->
+<section id="pricing" class="pricing">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Decisive Cyber Protection</h2>
+            <p>Wether you only want to cover esssentials ....</p>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-4">
+                <div class="box">
+                    <h3>CyberProtect Essentials</h3>
+                    <h4><sup>P</sup>65<span>per month</span></h4>
+                    <ul>
+                        <li><i class="bx bx-check"></i> Flexible backups: full image to file-level</li>
+                        <li><i class="bx bx-check"></i> Cloud backup</li>
+                        <li><i class="bx bx-check"></i> Quick Recovery</li>
+                        <li><i class="bx bx-check"></i> Anti-ransomware</li>
+                        <li><i class="bx bx-check"></i> Data Encryption</li>
+                        <li class="na"><i class="bx bx-x"></i> <span>Advanced anti-malware & anti-virus</span></li>
+                        <li class="na"><i class="bx bx-x"></i> <span>URL Filtering</span></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mt-4 mt-lg-0">
+                <div class="box featured">
+                    <h3>CyberProtect Plus</h3>
+                    <h4><sup>P</sup>87<span>per month</span></h4>
+                    <ul>
+                        <li><i class="bx bx-check"></i> Flexible Cloud Backups</li>
+                        <li><i class="bx bx-check"></i> Quick Recovery</li>
+                        <li><i class="bx bx-check"></i> Ransomware protection</li>
+                        <li><i class="bx bx-check"></i> Advanced anti-malware & anti-virus</li>
+                        <li><i class="bx bx-check"></i> URL filtering</li>
+                        <li><i class="bx bx-check"></i> Physical seeding</li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mt-4 mt-lg-0">
+                <div class="box">
+                    <h3>CyberProtect Premuim</h3>
+                    <h4><sup>P</sup>115<span>per month</span></h4>
+                    <ul>
+                        <li><i class="bx bx-check"></i> Flexible Cloud Backups</li>
+                        <li><i class="bx bx-check"></i> Quick Recovery</li>
+                        <li><i class="bx bx-check"></i> Ransomware protection</li>
+                        <li><i class="bx bx-check"></i> Advanced anti-malware & anti-virus</li>
+                        <li><i class="bx bx-check"></i> URL filtering</li>
+                        <li><i class="bx bx-check"></i> Physical seeding</li>
+                        <li><i class="bx bx-check"></i> Continous Backup</li>
+                        <li><i class="bx bx-check"></i> Data-Protect Map</li>
+
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section><!-- End Pricing Section -->
+<!-- ======= Frequently Asked Questions Section ======= -->
+<section id="faq" class="faq section-bg">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Frequently Asked Questions</h2>
+            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+        </div>
+
+        <div class="faq-list">
+            <ul>
+                <li data-aos="fade-up">
+                    <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1">1. What are managed services? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
+                        <p>
+                            Managed services refer to the outsourcing of specific IT tasks and responsibilities to a third-party provider typically called a managed service provider. Decisive Technologies is a managed service provider. Services include managing and monitoring IT infrastructure, networks, applications, backups, and security, as well as providing technical support and maintenance.
+                        </p>
+                    </div>
+                </li>
+
+                <li data-aos="fade-up">
+                    <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">Feugiat scelerisque varius morbi enim nunc? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
+                        <p>
+                            Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
+                        </p>
+                    </div>
+                </li>
+
+                <li data-aos="fade-up">
+                    <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">Dolor sit amet consectetur adipiscing elit? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
+                        <p>
+                            Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
+                        </p>
+                    </div>
+                </li>
+
+                <li data-aos="fade-up">
+                    <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
+                        <p>
+                            Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in.
+                        </p>
+                    </div>
+                </li>
+
+                <li data-aos="fade-up">
+                    <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                    <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
+                        <p>
+                            Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque.
+                        </p>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+
+
+<partial name="_TrialBox.cshtml" />
+                    
+
+<script>
+
+    // Define constants
+const productid = '@Model.productid';
+const planId = '@Model.id';
+   // const planId = '@Model';
+const numDevicesInput = document.getElementById("numDevices");
+
+// get the selected value 
+
+// const storageSelect = document.getElementById("storageSelect");
+const totalPriceDisplay = document.getElementById("totalPriceDisplay");
+const addtoCart = document.getElementById("addtoCart").addEventListener('click', function() {
+    addtocart();
+});
+
+    function isCloudStorageFalse() {
+        // Check if cloudstorage is false
+        return '@ViewBag.CartStatus.cloudstoragecart' === 'False';
+    }
+    if (isCloudStorageFalse()) {
+        console.log("cloudstoragecart is false");
+    } else {
+        console.log("cloudstoragecart is not false");
+        const storageSelect = document.getElementById("storageSelect");
+        storageSelect.addEventListener("change", updatePriceOnInput);
+    }
+ const cartstatus = '@ViewBag.CartStatus.cloudstoragecart';
+ console.log(cartstatus);
+
+function addtocart(){
+        if ('@ViewBag.CartStatus.cloudstoragecart' === 'False') {
+            var selectedValue = $('.cloud-storage-dropdown select').val();
+        } else {
+            var selectedValue = 0;
+        }
+       
+        const devices = parseInt(numDevicesInput.value);
+    console.log("about to add");
+     $.ajax({
+        type: "POST",
+        url: "/Order/AddItemstoShoppingCart",
+        cache: false,
+        data: {
+            "StorageQuantity": selectedValue,
+            "DeviceQuantity": devices,
+            "productid": productid
+        },
+        dataType: "json",
+        success: function(response) {
+        if (response.success) {
+            console.log("Added to cart");
+            
+            window.location.href = "/Order/Cart";
+        } else {
+            console.log("Failed to add to cart");
+        }
+        },
+        error: function(response) {
+            const exception = JSON.parse(response.responseText);
+            errorMessage(exception);
+        },
+    });
+
+}
+
+// Add event listeners
+numDevicesInput.addEventListener("input", updatePriceOnInput);
+   
+       // storageSelect.addEventListener("change", updatePriceOnInput);
+    
+   
+window.addEventListener("load", updatePriceOnLoad);
+
+// Function to update price on page load
+function updatePriceOnLoad() {
+    getPrice(planId);
+}
+
+// Function to update price on input change
+function updatePriceOnInput() {
+    getPrice(planId);
+}
+
+// Function to get price via AJAX
+function getPrice(planId) {
+        if ('@ViewBag.CartStatus.cloudstoragecart' === 'False') {
+            var selectedValue = $('.cloud-storage-dropdown select').val();
+        } else {
+            var selectedValue = 0;
+        }
+
+    const devices = parseInt(numDevicesInput.value);
+
+    $.ajax({
+        type: "POST",
+        url: "/Management/StoragePricingHandler",
+        cache: false,
+        data: {
+            "StorageQuantity": selectedValue,
+            "DeviceQuantity": devices,
+            "Plan": planId
+        },
+        dataType: "json",
+        success: function(response) {
+            const totalPrice = response.totalupcomingprice; 
+            console.log("Total Price:", totalPrice);
+            updatePrice(totalPrice);
+        },
+        error: function(response) {
+            const exception = JSON.parse(response.responseText);
+            errorMessage(exception);
+        },
+    });
+}
+
+// Function to update price display
+
+
+function updatePrice(totalPrice) {
+          
+            document.getElementById("totalPriceDisplay").textContent = "P" + totalPrice.toFixed(2); 
+        }
+
+// Function to handle error messages
+function errorMessage(exception) {
+    // Implement error message handling as needed
+}
+
+</script>
+
+
+
+
+
+
+
+   

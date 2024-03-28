@@ -18,21 +18,26 @@ else
 
     @*User profile section*@
     <li>
-   
+        <a href="/portal/home">
+            <i class="bi bi-house"></i>
+
+        </a>
+   </li>
+   <li>
     <div class="dropdown">
         <button class="btn btn-outline-success dropdown-toggle" type="button" id="profile-btn" data-toggle="dropdown"
                 aria-expanded="false">
-            <i class="bi bi-person-badge"></i> Hello @User.FindFirst("UserFirstName").Value
+            <i class="bi bi-person-badge"></i> @User.FindFirst("UserFirstName").Value
            @* <i class="bi bi-person-badge"></i> Hello @UserManager.GetUserName(User)*@
         </button>
         <ul class="dropdown-menu" aria-labelledby="profile-btn">
             <li>
-                <a class="dropdown-item" asp-controller="Order" asp-action="Index">
+                <a class="dropdown-item" asp-controller="Order" asp-action="ShoppingCart">
                     <i class="bi bi-list"></i> Shopping Cart
                 </a>
             </li>
              <li>
-                <a class="dropdown-item" asp-controller="Order" asp-action="Index">
+                <a class="dropdown-item" asp-controller="Portal" asp-action="Home">
                     <i class="bi bi-list"></i> Customer Portal
                 </a>
             </li>

@@ -1,6 +1,7 @@
-﻿
-@model List<WebApplication3.Models.Product>
+﻿@using WebApplication3.Models;
 @using WebApplication3.Data.Enums;
+@model WebApplication3.Models.Product
+
 
 @{
     ViewData["Title"] = "Decisive Technologies";
@@ -9,17 +10,9 @@
 <section id="breadcrumbs" class="breadcrumbs">
     <div class="container">
 
-        @*<ol>
-            <li><a href="index.html">Home</a></li>
-            <li>Inner Page</li>
-        </ol>*@
-
 
     </div>
 </section><!-- End Breadcrumbs -->
-@foreach (var item in Model)
-{
-<!-- ======= Product Info Section ======= -->
 <section id="product-info" class="product-info section-bg">
     <div class="container-fluid">
         <div class="row">
@@ -33,7 +26,7 @@
                         </div>
                         <div class="text-container">
                             <!-- Product name and small label -->
-                            <h3>@item.Name</h3>
+                            <h3>@Model.Name</h3>
                             <h6>Cloudbackup | Endpoint protection</h6>
                         </div>
                     </div>
@@ -53,22 +46,18 @@
 
                 </ul>
                 <!-- Compatibility label -->
-                <h6>@item.compatibility</h6>
+                <h6>@Model.compatibility</h6>
             </div>
         </div>
     </div>
 
 </section>
-
-
-
-
 <div class="checkout">
     <div class="row featured">
         <!-- Column 1 - Logo and Label -->
         <div class="column single-logo">
             <img src="~/assets/img/logo.png" alt="Logo">
-            <h3>@item.Name</h3>
+            <h3>@Model.Name</h3>
         </div>
 
         <!-- Column 2 - Workstations and Cloud Storage Dropdowns -->
@@ -83,19 +72,26 @@
 
             </div>
 
-            <div class="cloud-storage-dropdown">
-                <h3>Cloud Storage</h3>
-                 <select id="storageSelect">
-    @{
-       foreach (StorageSizes size in Enum.GetValues(typeof(StorageSizes)))
-{
-    string sizeText = size.ToString().Replace('_', ' '); // Replace underscore with space
-    string optionValue = sizeText.Substring(3); // Remove the "GB_" prefix
-    <option value="@optionValue">@sizeText</option>
-}
-    }
-</select>
-            </div>
+            @if (ViewBag.CartStatus.cloudstoragecart != null)
+            {
+            }
+            else
+            {
+                <div class="cloud-storage-dropdown">
+                    <h3>Cloud Storage</h3>
+                    <select id="storageSelect">
+                        @{
+                            foreach (StorageSizes size in Enum.GetValues(typeof(StorageSizes)))
+                            {
+                                string sizeText = size.ToString().Replace('_', ' '); // Replace underscore with space
+                                string optionValue = sizeText.Substring(3); // Remove the "GB_" prefix
+                                <option value="@optionValue">@sizeText</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+
         </div>
 
         <!-- Column 3 - Price and Monthly Label -->
@@ -122,7 +118,7 @@
 
         <div class="section-title">
             <h2>Features</h2>
-            <p>@item.Description/p>
+            <p>@Model.Description</p>
         </div>
 
         <div class="row">
@@ -206,7 +202,7 @@
     </div>
 </section><!-- End Services Section -->
 
-}
+
 <!-- ======= Product Details Section ======= -->
 <section id="product-details" class="product-details section-bg">
     <div class="container-fluid" data-aos="fade-up">
@@ -389,139 +385,47 @@
         </div>
 
     </div>
-</section>--><!-- End Frequently Asked Questions Section -->
+</section>
 
 
-
-<partial name="_TrialBox.cshtml" />
-                    
-
-@foreach (var item in Model)
-{
-   <div class="row">
-    <div class="col-md-8 offset-2">
-        <div class="card mb-12">
-            <div class="row g-0">
-                <div class="col-md-12">
-                    <div class="card-header text-white bg-info">
-                        <p class="card-text">
-                            <h5 class="card-title">
-                                @item.Name
-                            </h5>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <img src="" width="100%" alt="@item.Name">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <p class="card-text">Text</p>
-                        <p class="card-text">
-                            @*<b>Cinema: </b>
-                            <a asp-controller="Cinemas" asp-action="Details" asp-route-id="@Model.CinemaId">
-                                @Model.Cinema.Name
-                            </a>*@
-                        </p>
-                        <p class="card-text">
-                           <p class="card-text"><b>Interval: </b>Text </p>
-                           <p class="card-text"><b>Usage type: </b>Text </p>
-                          
-                           @* <b>Features: </b>
-                            <a asp-controller="Producers" asp-action="Details" asp-route-id="@Model.ProducerId">
-                                @Model.Producer.FullName
-                            </a>*@
-                        </p>
-                     
-                        <p class="card-text">
-                            <b>Fearures: </b>
-                            <hr />
-                            <div class="row">
-                                <div class="column text-center">
-
-                                    <b>Pricing</b>
-                                </div
-                            </div>
-                            <div class="row">
-                                
-                                    <div class="column ">
-                                        <div class="form-group">
-                                             <label for="numericInput">Devices:</label>
-                                                 <input type="number" class="form-control" id="numericInput" name="numericInput" value="1" />
-
-                                        </div>
-                                    </div>
-                                         @*<div class="column ">
-                                            <div class="form-group">
-                                                    <div class="form-group">
-        <label for="PageSize">Cloud Storage:</label>
-        <select id="PageSize" name="PageSize" class="form-control">
-                 <option value="size_1" data-price-id="price_1NwmttDprfyvhQjotdEyVZQF">50</option>
-        <option value="size_2" data-price-id="price_1NwmttDprfyvhQjo0xdUlMQo">100</option>
-         <option value="size_1" data-price-id="price_1NwmttDprfyvhQjobp8o8YhE">150</option>
-      
-            <option value="200">200</option>
-            <option value="400">400</option>
-            <option value="500">500</option>
-            <option value="1000">1000</option>
-            <option value="2000">2000</option>
-            <option value="3000">3000</option>
-        </select>
-    </div>
-
-                                            </div>
-                                        </div*@
-                            </div>
-                            @*<div class="row">
-                                @foreach (var actor in Model.)
-                                {
-                                        <div class="column text-center">
-                                            <img class="border-info rounded-circle" src="@actor.Actor.ProfilePictureURL" style="max-width: 150px" />
-                                            <br />
-                                            <a asp-controller="Actors" asp-action="Details" asp-route-id="@actor.ActorId">@actor.Actor.FullName</a>
-                                        </div>
-                                }
-                            </div>*@
-                        </p>
-
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card-footer">
-                        <p class="card-text">
-                            <a class="btn btn-outline-primary float-right" asp-action="Index">
-                                Back to List
-                            </a>
-                            <a id="addToCartButton" class="btn btn-success text-white" 
-                               asp-controller="Order" 
-                               asp-action="AddItemToShoppingCart"
-                              
-                               asp-route-id="@item.productid">
-                              @* data-quantity="1" 
-                               data-totalprice="@item.unitamount"*@ 
-                               
-                               <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.price.ToString("c"))</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> 
 <script>
+
     // Define constants
-const productid = 'prod_PfaV1MXMTkBRqO';
-const planId = 'price_1OqFKNDprfyvhQjoaFJYBpae';
+const productid = '@Model.productid';
+const planId = '@Model.id';
+   // const planId = '@Model';
 const numDevicesInput = document.getElementById("numDevices");
-const storageSelect = document.getElementById("storageSelect");
+
+// get the selected value 
+
+// const storageSelect = document.getElementById("storageSelect");
 const totalPriceDisplay = document.getElementById("totalPriceDisplay");
 const addtoCart = document.getElementById("addtoCart").addEventListener('click', function() {
     addtocart();
 });
 
+    function isCloudStorageFalse() {
+        // Check if cloudstorage is false
+        return '@ViewBag.CartStatus.cloudstoragecart' === 'False';
+    }
+    if (isCloudStorageFalse()) {
+        console.log("cloudstoragecart is false");
+    } else {
+        console.log("cloudstoragecart is not false");
+        const storageSelect = document.getElementById("storageSelect");
+        storageSelect.addEventListener("change", updatePriceOnInput);
+    }
+ const cartstatus = '@ViewBag.CartStatus.cloudstoragecart';
+ console.log(cartstatus);
+
 function addtocart(){
-    const selectedValue = $('.cloud-storage-dropdown select').val();
-    const devices = parseInt(numDevicesInput.value);
+        if ('@ViewBag.CartStatus.cloudstoragecart' === 'False') {
+            var selectedValue = $('.cloud-storage-dropdown select').val();
+        } else {
+            var selectedValue = 0;
+        }
+
+        const devices = parseInt(numDevicesInput.value);
     console.log("about to add");
      $.ajax({
         type: "POST",
@@ -536,8 +440,8 @@ function addtocart(){
         success: function(response) {
         if (response.success) {
             console.log("Added to cart");
-            
-            window.location.href = "/Order/ShoppingCart";
+
+            window.location.href = "/Order/Cart";
         } else {
             console.log("Failed to add to cart");
         }
@@ -552,7 +456,10 @@ function addtocart(){
 
 // Add event listeners
 numDevicesInput.addEventListener("input", updatePriceOnInput);
-storageSelect.addEventListener("change", updatePriceOnInput);
+
+       // storageSelect.addEventListener("change", updatePriceOnInput);
+
+
 window.addEventListener("load", updatePriceOnLoad);
 
 // Function to update price on page load
@@ -567,7 +474,12 @@ function updatePriceOnInput() {
 
 // Function to get price via AJAX
 function getPrice(planId) {
-    const selectedValue = $('.cloud-storage-dropdown select').val();
+        if ('@ViewBag.CartStatus.cloudstoragecart' === 'False') {
+            var selectedValue = $('.cloud-storage-dropdown select').val();
+        } else {
+            var selectedValue = 0;
+        }
+
     const devices = parseInt(numDevicesInput.value);
 
     $.ajax({
@@ -596,7 +508,7 @@ function getPrice(planId) {
 
 
 function updatePrice(totalPrice) {
-          
+
             document.getElementById("totalPriceDisplay").textContent = "P" + totalPrice.toFixed(2); 
         }
 
@@ -609,233 +521,4 @@ function errorMessage(exception) {
 
 
 
-@*<script>
-     const planid = @item.id;
-      console.log(planid);
-      // Calculate and update price on page load
-            getPrice(planid);
-    
-    // Add event listener to detect changes in the numeric input
-        document.getElementById("numDevices").addEventListener("input", getPrice(planid));
 
-    document.getElementById('storageSelect').addEventListener('change', function() {
-
-        getPrice(planid);
-    });
-
-   
-
-    function getPrice(planid) {
-        var selectedValue = $('.cloud-storage-dropdown select').val();
-        let devices =  parseInt(document.getElementById("numDevices").value);
-           
-         
-      console.log(selectedValue);
-      $.ajax({
-        type: "POST",
-        url: "/Management/StoragePricingHandler",
-        cache: false,
-        data: {
-            "StorageQuantity": selectedValue,
-            "DeviceQuantity" : devices,
-            "Plan" : planid
-        },
-        dataType: "json",
-
-             success: function (response) {
-            totalprice = response.AmountDue; 
-            // Now you can use totalPrice variable wherever needed in your JavaScript code
-            console.log("Total Price:", totalprice);
-            updatePrice(totalprice);
-           
-        },
-        error: function (response) {
-            var exception = JSON.parse(response.responseText);
-           
-            errorMessage(exception);
-        },
-    });
-    }
-
-     function updatePrice(totalprice) {
-          
-            document.getElementById("totalPriceDisplay").textContent = "P" + totalprice.toFixed(2); // Format the price with 2 decimal places
-        }
-
-
-</script>*@
-
-
-@*<script>
-   
-   // Initialize Stripe.js using your publishable key
-const stripe = Stripe('pk_test_51N9sPpDprfyvhQjoingqjh9S848PSX3p7JU9CPwHiL1AiJWZ2lonoBQuMII5zRndx5z7gT0AW2YsWxXr4VAtQogH00aWgWL8Ob');
-
-
-    console.log("stripe added");
-
-    const productId = 'prod_PgyiINyEyBPyea';
-    console.log("productid added");
-
-    document.addEventListener("DOMContentLoaded", function() {
-       
-        
-        // Function to update the total price
-       
-       async function updatePrice() {
-            // Get the item price and selected number of devices
-            let itemPrice = parseFloat('@item.price'); // Assuming Price is a decimal value
-            let numDevices = parseInt(document.getElementById("numDevices").value);
-
-            var selectedValue = $('.cloud-storage-dropdown select').val();
-
-            console.log("Selected value:", selectedValue);
-          
-
-           // Retrieve the product information from Stripe
-            
-           const product = await stripe.products.retrieve(productId);
-
-
-         
-
-    // Get the pricing tiers for the product
-    const pricingTiers = product.tiers;
-
-    // Find the appropriate tier for the given unit quantity
-   
-    let totalStorageAmount = 0;
-    for (const tier of pricingTiers) {
-      if (selectedValue >= tier.up_to) {
-        totalStorageAmount = selectedValue * tier.price;
-        break;
-      }
-    }
-
-            // Calculate the total price
-            let totalPrice = itemPrice * numDevices + totalStorageAmount ;
-      
-            console.log(totalPrice);
-            // Update the price display
-
-            document.getElementById("totalPriceDisplay").textContent = "P" + totalPrice.toFixed(2); // Format the price with 2 decimal places
-        }
-
-        // Add event listener to detect changes in the numeric input
-        document.getElementById("numDevices").addEventListener("input", updatePrice);
-
-        // Call the function initially to set the initial price
-        updatePrice();
-    });
-</script>*@
-
-
-
-
-@*<script>
-        function updateQuantity() {
-            var quantity = parseInt($("#numericInput").val());
-        // Update the data-quantity attribute of the addToCartButton
-        var addToCartButton = document.getElementById("addToCartButton");
-        addToCartButton.setAttribute("data-quantity", quantity);
-    }
-
-    $(document).ready(function () {
-        // Initialize Stripe
-        var stripe = Stripe('pk_test_51N9sPpDprfyvhQjoingqjh9S848PSX3p7JU9CPwHiL1AiJWZ2lonoBQuMII5zRndx5z7gT0AW2YsWxXr4VAtQogH00aWgWL8Ob');
-        // Get the price from your server-side code (e.g., Razor)
-        var productPrice = @item.price; // Replace with the correct way to get the price
-        console.log("Product Price:", productPrice); // Log the productPrice variable
-
-        // Function to update the totals and button text
-        function updateTotalsAndButton() {
-            var quantity = parseInt($("#numericInput").val());
-            console.log("Quantity:", quantity);
-
-            // Calculate the total based on the product price
-            var productTotalPrice = (productPrice / 100) * quantity;
-            console.log("Product Total Price:", productTotalPrice);
-
-            // Update the "Add to Cart" button text based on the selected total
-            $("#addToCartButton").text("Add to Cart (Price " + productTotalPrice.toFixed(2) + ")");
-        }
-
-        // Call updateTotalsAndButton initially to set the initial totals and button text
-        updateTotalsAndButton();
-
-        // Bind change events to the numeric input to update the totals and button text
-        $("#numericInput").on("change", function () {
-            updateTotalsAndButton();
-        });
-    });
-
-
-
-<script>
-    // Function to calculate and update the total price
-    function updatePrice() {
-        // Get the item price and selected number of devices
-        var itemPrice = parseFloat('@item.Price'); // Assuming Price is a decimal value
-        var numDevices = parseInt(document.getElementById("numericInput").value);
-
-        // Calculate the total price
-        var totalPrice = itemPrice * numDevices;
-
-        // Update the price display
-        document.getElementById("totalPrice").innerText = "P" + totalPrice.toFixed(2); // Format the price with 2 decimal places
-    }
-
-    // Add event listener to detect changes in the numeric input
-    document.getElementById("numericInput").addEventListener("change", updatePrice);
-
-    // Calculate and update price on page load
-    updatePrice();
-</script>
-
-
-</script>*@
-
-
-@*<script>
-    // Function to calculate and update the total price
-    function updatePrice() {
-        // Get selected number of devices
-        var numDevices = parseInt(document.getElementById("numDevices").value);
-        
-        // Get selected cloud storage size
-        var selectedSize = document.querySelector('.cloud-storage-dropdown select').value;
-        var cloudStoragePrice;
-
-        // Calculate cloud storage price based on selected size
-        switch (selectedSize) {
-            case "50 GB":
-                cloudStoragePrice = 5.99; // Sample price for 50 GB
-                break;
-            case "100 GB":
-                cloudStoragePrice = 9.99; // Sample price for 100 GB
-                break;
-            // Add more cases for other storage sizes as needed
-            default:
-                cloudStoragePrice = 0;
-        }
-        
-        // Calculate total price based on number of devices and cloud storage price
-        var totalPrice = (numDevices * cloudStoragePrice) + 99.99; // Assuming a base price of P99.99
-        
-        // Update the price display
-        document.getElementById("totalPrice").innerText = "P" + totalPrice.toFixed(2); // Format the price with 2 decimal places
-    }
-
-    // Add event listeners to detect changes in dropdowns
-    document.getElementById("numDevices").addEventListener("change", updatePrice);
-    document.querySelector('.cloud-storage-dropdown select').addEventListener("change", updatePrice);
-
-    // Calculate and update price on page load
-    updatePrice();
-</script>*@
-
-}
-
-
-
-   
