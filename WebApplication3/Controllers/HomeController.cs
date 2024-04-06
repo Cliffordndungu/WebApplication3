@@ -47,9 +47,21 @@ namespace WebApplication3.Controllers
             var service = new ProductService();
             StripeList<Stripe.Product> productList = service.List(options);
 
+            //take out cloudstorage
+            var storageproductid = "prod_PgyiINyEyBPyea"; // ID of the product to remove
+
+            //prod_PgyiINyEyBPyea
+
+
+
             foreach (var stripeProduct in productList)
             {
-               Index_Products product = new Index_Products
+                if (stripeProduct.Id == storageproductid)
+                {
+                    // Skip this product
+                    continue;
+                }
+                Index_Products product = new Index_Products
                 {
                     id = stripeProduct.Id,
                     Name = stripeProduct.Name,
@@ -72,6 +84,10 @@ namespace WebApplication3.Controllers
             return View(products);
         }
 
+
+
+
+   
 
     
 

@@ -17,5 +17,12 @@ namespace WebApplication3.Data.Repository
 
         Task<IdentityResult> ResetPasswordAsync(ResetPasswordModel model);
 
+        Task CreateCustomer(string name, string email, string userid);
+
+        Task SendOrderConfirmation(string customerid);
+
+        Task<string> Gettenantid(string customerid);
+
+
     }
 }

@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Stripe;
+using System;
 using WebApplication3.Data.Services;
+using WebApplication3.Migrations;
 using WebApplication3.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebApplication3.Data.Repository
 {
@@ -9,16 +14,19 @@ namespace WebApplication3.Data.Repository
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUserService _userservice;
+        private readonly AcronisTokenService _acronisservice;
         private readonly IEmailSender _emailservice;
         private readonly IConfiguration _configuration;
 
-        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUserService userservice, IEmailSender emailservice, IConfiguration configuration)
+
+        public AccountRepository(AcronisTokenService acronisservice, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUserService userservice, IEmailSender emailservice, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userservice = userservice;
             _emailservice = emailservice;
             _configuration = configuration;
+            _acronisservice = acronisservice;
         }
 
         public async Task<IdentityResult> ChangePasswordAsync (ChangePasswordModel model)
@@ -94,6 +102,84 @@ namespace WebApplication3.Data.Repository
             await _emailservice.SendEmailForForgotPassword(emailOptions);
         }
 
+        public async Task CreateCustomer(string name, string email,string userid)
+        {
+
+            // Get the user with the provided userid
+            var user = await _userManager.FindByIdAsync(userid);
+
+            var customerOptions = new CustomerCreateOptions
+            {
+                Name = name,
+                Email = email,
+            };
+            var customerService = new CustomerService();
+            var customer = customerService.Create(customerOptions);
+
+            //get the user and update the user
+            //get user with userid 
+
+            user.stpcustomerid = customer.Id;
+            await _userManager.UpdateAsync(user);
+
+
+        }
+
+        public async Task SendOrderConfirmation(string customerid)
+        {
+
+            //get email using usermANAGER for user with stripecustomerid 
+            //get name 
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.stpcustomerid == customerid);
+
+
+
+            UserEmailOptions emailOptions = new UserEmailOptions()
+            {
+                ToEmails = new List<string>() { user.Email },
+                Placeholders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", user.FullName),
+                  
+                }
+            };
+
+            await _emailservice.SendEmailOrderConfirmation(emailOptions);
+
+        }
+    
+    public async Task<string> Gettenantid(string customerid)
+        {
+            //get email using usermANAGER for user with stripecustomerid 
+            //get name 
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.stpcustomerid == customerid);
+
+            if (user.Tenantid == null)
+            {
+                var newtenantid = await _acronisservice.CreateTenant(user.FullName);
+                user.Tenantid = newtenantid;
+
+                // Update user in the database
+                var updateResult = await _userManager.UpdateAsync(user);
+
+                if (updateResult.Succeeded)
+                {
+                    return user.Tenantid;
+                }
+                else
+                {
+                    return "failed";
+                    // Handle update failure
+                }
+
+            }
+            return "failed";
+
+        }
 
     }
+
+
+
+
 }

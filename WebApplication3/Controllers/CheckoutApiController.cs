@@ -6,28 +6,144 @@ using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Stripe;
+using System.Text;
 using WebApplication3.Data.Cart;
+using WebApplication3.Data.Repository;
 using WebApplication3.Data.ViewModels;
 using WebApplication3.Models;
 using static WebApplication3.Models.StripeModel;
 
 namespace WebApplication3.Controllers
 {
-   
+ 
     public class CheckoutApiController : Controller
     {
+   
+        const string endpointSecret = "whsec_7TF9zDWaeCTHSXSOEXrq93V8AqobrXDA";
         private readonly WebApplication3.Data.Services.SubscriptionsService _subscriptionService;
         private readonly ShoppingCart _shoppingcart;
         private readonly AcronisTokenService _acronisservice;
         private readonly UserManager<ApplicationUser> _usermanager;
+        private readonly IAccountRepository _accountRepository;
 
 
-        public CheckoutApiController(UserManager<ApplicationUser> usermanager, WebApplication3.Data.Services.SubscriptionsService subscriptionService, ShoppingCart shoppingcart, AcronisTokenService acronistokenservice)
+
+        public CheckoutApiController(IAccountRepository accountRepository, UserManager<ApplicationUser> usermanager, WebApplication3.Data.Services.SubscriptionsService subscriptionService, ShoppingCart shoppingcart, AcronisTokenService acronistokenservice)
         {
             _subscriptionService = subscriptionService;
             _shoppingcart = shoppingcart;
             _acronisservice = acronistokenservice;
             _usermanager =  usermanager;
+            _accountRepository = accountRepository;
+        }
+
+        // This is your Stripe CLI webhook secret for testing your endpoint locally.
+
+
+        [HttpPost]
+
+        public async Task<IActionResult> StripeEventHandler([FromBody] StripeEventRequest model)
+        {
+
+            string eventId = model.id;
+            string eventType = model.type;
+           
+
+            if (eventType == "customer.subscription.created")
+
+            {
+                string customerId = model.data?.@object?.customer;
+                string subId = model.data?.@object.id;
+
+                //trigger an email 
+                await _accountRepository.SendOrderConfirmation(customerId);
+
+                var options = new SubscriptionItemListOptions
+                {
+                  
+                    Subscription = subId,
+                };
+                var service = new SubscriptionItemService();
+
+                StripeList<SubscriptionItem> subscriptionItems = service.List(options);
+
+                string tenant = await _accountRepository.Gettenantid(customerId);
+
+                _acronisservice.OfferManager("subscribe", tenant, subscriptionItems);
+
+
+
+
+
+
+
+                // Trigger an email
+                //await emailService.SendEmailAsync("recipient@example.com", "Subscription Created", "Subscription has been created. Please take necessary actions.");
+                // Trigger acronis provisioning
+                // Trigger an email to decisive -> include the items
+            }
+            //else if (eventType == "payment.succeeded")
+            //{
+            //    // Send email to decisive -> include payment amount and customer name and email
+            //    //await emailService.SendEmailAsync("recipient@example.com", "Payment Succeeded", "Payment has been succeeded. Please take necessary actions.");
+            //}
+
+            // where model type is subscription created, 
+
+
+
+            // get event subscrition.created
+            // trigger an email 
+            // trigger acronis provisioning
+            //trigger and email to decisive -> include the items 
+
+
+            //get event for payment.succeeded
+            //send email to decisive -> include payment amount and customer name and email 
+
+
+            return Ok();
+
+            //using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            //{
+            //    string requestBodyContent = await reader.ReadToEndAsync();
+            //    // You can process the requestBodyContent here if needed
+            //    return Ok(requestBodyContent); // Return the content as Ok result
+            //}
+
+         
+            //try
+            //{
+            //    // Extract the raw request body if it's not already passed as a parameter
+            //    if (string.IsNullOrEmpty(requestBody))
+            //    {
+            //        using (var reader = new StreamReader(HttpContext.Request.Body))
+            //        {
+            //            requestBody = await reader.ReadToEndAsync();
+            //        }
+            //    }
+
+            //    // Replace "endpointSecret" with your actual Stripe webhook endpoint secret
+            //    var stripeEvent = EventUtility.ConstructEvent(requestBody,
+            //        Request.Headers["Stripe-Signature"], endpointSecret);
+
+            //    // Handle the event
+            //    if (stripeEvent.Type == Events.PaymentIntentSucceeded)
+            //    {
+            //        // Handle PaymentIntentSucceeded event
+            //    }
+            //    // ... handle other event types
+            //    else
+            //    {
+            //        Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
+            //    }
+
+            //    return Ok();
+            //}
+            //catch (StripeException e)
+            //{
+            //    return BadRequest();
+            //}
         }
 
 

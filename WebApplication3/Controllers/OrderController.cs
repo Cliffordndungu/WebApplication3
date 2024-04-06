@@ -19,11 +19,13 @@ namespace WebApplication3.Controllers
         private readonly ShoppingCart _shoppingCart;
         private readonly OrdersService _orderservice;
         private readonly SubscriptionsService _subscriptionservice;
-        public OrderController(ShoppingCart shoppingCart, OrdersService orderService, SubscriptionsService subscriptionsService)
+        private readonly IUserService _userService;
+        public OrderController(ShoppingCart shoppingCart, OrdersService orderService, SubscriptionsService subscriptionsService, IUserService userservice)
         {
             _shoppingCart = shoppingCart;
             _orderservice = orderService;
             _subscriptionservice = subscriptionsService;
+            _userService = userservice;
         }
 
         [Route("Order/ShoppingCart")]
@@ -379,11 +381,13 @@ namespace WebApplication3.Controllers
         
 
         [Authorize]
-        public ActionResult checkout()
+        public async Task<ActionResult> checkout()
         {
+
+            var stpcustomerid = _userService.GetSTPCustomerId();
             // Fetch products and quantities from the shopping cart
             var items = _shoppingCart.GetShoppingCartItems();
-            var domain = "https://webapplication320240320023239.azurewebsites.net/Order";
+            var domain = "https://localhost:7128/Order";
             var lineItems = new List<SessionLineItemOptions>();
 
             var productService = new ProductService();
@@ -405,9 +409,10 @@ namespace WebApplication3.Controllers
                 }
 
             }
-           
+
             var options = new SessionCreateOptions
             {
+                Customer = stpcustomerid,
                 LineItems = lineItems,
                 Mode = "subscription",
                 SuccessUrl = domain + "/Complete",

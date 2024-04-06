@@ -4,5 +4,7 @@
     {
         string GetUserId();
         bool IsAuthenticated();
+
+        string GetSTPCustomerId();
     }
 }

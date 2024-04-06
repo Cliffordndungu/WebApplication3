@@ -34,8 +34,8 @@ namespace WebApplication3
         public AcronisTokenService(IMemoryCache cache, DataContext context, UserManager<ApplicationUser> userManager)
         {
 
-            _clientId = "7aaf9aed-1300-4492-a0f7-2f3de98bdd86";
-            _clientSecret = "6srtpcvlkkommcabu2iunkm3xenfechm7gq3wd7w57t5oxftqzwq";
+            _clientId = "c4411144-e048-4826-a56a-cf6e9a737350";
+            _clientSecret = "isxcvtxgy5ugq2tewny2sr7cr436smyw5lq5xfpbtjqrq6zmno7y";
             string datacenter = "https://eu2-cloud.acronis.com";
             _baseAPIUrl = $"{datacenter}/api/2";
             _cache = cache;
@@ -237,6 +237,37 @@ namespace WebApplication3
 
         }
 
+        public async void OfferManager(string status, string tenantid, StripeList<SubscriptionItem> subscriptionItems)
+        {
+            if (_cache.TryGetValue(cachekey, out TokenResponse tokenResponse))
+            {
+                //token present
+                string accesstk = tokenResponse.access_token;
+
+                foreach (SubscriptionItem item in subscriptionItems)
+                {
+                    setofferingAsync(accesstk, status, tenantid, item.Price.Id, item.Quantity );
+                }
+                
+
+
+            }
+            else
+            {
+                string accesstk = await CreateToken();
+                foreach (SubscriptionItem item in subscriptionItems)
+                {
+                    setofferingAsync(accesstk, status, tenantid, item.Price.Id, item.Quantity);
+                }
+                //Access token not found 
+           
+              
+
+            }
+
+
+        }
+
 
 
         public async void setofferingAsync(string accesstoken, string status, string tenantid, string priceid, long quantity)
@@ -244,7 +275,7 @@ namespace WebApplication3
             if (status == "subscribe")
             {
 
-                if (priceid == "prod_OkZOro9UbKZO9j")
+                if (priceid == "price_1OqFGkDprfyvhQjoBJUkvUho")
                 {
                     var httpClient = new HttpClient();
                     var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseAPIUrl}/tenants/{tenantid}/offering_items");

@@ -264,6 +264,23 @@ h6 {
   visibility: visible;
 }
 
+
+    .navbar .button {
+        padding: 8px 20px 0 20px;
+        margin-left: 50px;
+        border-radius: 50px;
+        color: #fff;
+        font-size: 14px;
+    
+    }
+
+        .navbar .button:hover {
+            background-color: #fff; /* White background on hover */
+            color: #47b2e4; /* Light blue text color on hover */
+        }
+
+
+
 @media (max-width: 1366px) {
   .navbar .dropdown .dropdown ul {
     left: -90%;
@@ -385,6 +402,8 @@ h6 {
   display: block;
   visibility: visible !important;
 }
+
+
 
 /*--------------------------------------------------------------
 # Hero Section
@@ -2089,7 +2108,19 @@ Checkout
   border: 1px solid #47b2e4;
 }
 
+/* Profile button */
 
+/* Override Bootstrap button outline style */
+.btn-outline-success {
+    color: #007bff; /* Blue color */
+    border-color: #007bff; /* Blue color */
+}
+
+    /* Override Bootstrap button background color on hover */
+    .btn-outline-success:hover {
+        color: #fff; /* White text color */
+        background-color: #007bff; /* Blue color */
+    }
 
 
 	

@@ -9,5 +9,7 @@ namespace WebApplication3.Data.Services
 
         Task SendEmailForForgotPassword(UserEmailOptions userEmailOptions);
 
+        Task SendEmailOrderConfirmation(UserEmailOptions userEmailOptions);
+
     }
 }

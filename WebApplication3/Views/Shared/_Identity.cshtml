@@ -11,24 +11,42 @@
     </a>*@
 
     <li><a class="nav-link scrollto" asp-controller="Account" asp-action="Login">Login</a></li>
-    <li><a class="getstarted scrollto" asp-controller="Account" asp-action="Register">Get Started</a></li>
+    <li><a class="getstarted scrollto" asp-controller="Account" asp-action="Register">Start Free Trial</a></li>
 }
 else
 {
 
     @*User profile section*@
-    <li>
+   @* <li>
         <a href="/portal/home">
             <i class="bi bi-house"></i>
 
         </a>
-   </li>
-   <li>
+   </li>*@
+
+    <li class="dropdown">
+        <a href="#"><i class="bi bi-person-badge bi-chevron-down"></i></a>
+        <ul>
+
+            <li class="dropdown">
+                <a asp-controller="Order" asp-action="ShoppingCart"><span>Shopping Cart</span> </a>
+                <a asp-controller="Portal" asp-action="Home"><span>Customer Portal</span> </a>
+               
+            </li>
+          
+
+
+        </ul>
+    </li>
+   
+
+  @* <li>
     <div class="dropdown">
-        <button class="btn btn-outline-success dropdown-toggle" type="button" id="profile-btn" data-toggle="dropdown"
+          
+            <button class="button dropdown-toggle" type="button" id="profile-btn" data-toggle="dropdown"
                 aria-expanded="false">
             <i class="bi bi-person-badge"></i> @User.FindFirst("UserFirstName").Value
-           @* <i class="bi bi-person-badge"></i> Hello @UserManager.GetUserName(User)*@
+            <i class="bi bi-person-badge"></i> Hello @UserManager.GetUserName(User)
         </button>
         <ul class="dropdown-menu" aria-labelledby="profile-btn">
             <li>
@@ -45,7 +63,7 @@ else
 
         </ul>
     </div>
-    </li>
+    </li>*@
 
     <li><a class="nav-link scrollto" asp-controller="Account" asp-action="Logout">Logout</a></li>
     

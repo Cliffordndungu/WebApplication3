@@ -65,15 +65,21 @@
                     </a>
                 </li><!-- End Search Icon-->
 
-                <li class="nav-item dropdown">
+                <li>
                 <a href="/portal/home">
                     <i class="bi bi-house"></i>
-               
-                </a>
 
+                </a>
+                </li>
+                <li>
                 <ul class="navbar-nav">
                     @await Component.InvokeAsync("ShoppingCartSummary")
                 </ul>
+                </li>
+                <li class="nav-item dropdown">
+               
+
+                
 
                     <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                         <i class="bi bi-bell"></i>
