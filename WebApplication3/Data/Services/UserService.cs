@@ -39,5 +39,19 @@ namespace WebApplication3.Data.Services
             // If the user is not found or if STPCustomerId is null, return null or an appropriate default value
             return null;
         }
+
+        public string GettenandId()
+        {
+            var user = _userManager.GetUserAsync(_httpcontext.HttpContext.User).Result;
+
+            // Check if the user exists and return the stopcustomerid property
+            if (user != null)
+            {
+                return user.Tenantid;
+            }
+
+            // If the user is not found or if STPCustomerId is null, return null or an appropriate default value
+            return null;
+        }
     }
 }

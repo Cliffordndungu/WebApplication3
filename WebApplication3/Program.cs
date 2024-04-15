@@ -54,13 +54,14 @@ StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:SecretKey"];
 //    client.BaseAddress = new Uri(configuration["AcronisApi:BaseUrl"]);
 //    client.DefaultRequestHeaders.Add("Authorization", $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes($"{configuration["AcronisApi:ClientId"]}:{configuration["AcronisApi:ClientSecret"]}"))}");
 //});
+
 builder.Services.AddScoped<AcronisTokenService>();
 builder.Services.AddScoped<TwilioService>();
 builder.Services.AddScoped<ShoppingCart>();
 builder.Services.AddScoped<OrdersService>();
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 //builder.Services.AddSingleton(stripeSettings);
-builder.Services.AddScoped<SubscriptionsService>();
+builder.Services.AddScoped<ISubscriptionsService, SubscriptionsService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();

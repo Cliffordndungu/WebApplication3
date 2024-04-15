@@ -1,0 +1,381 @@
+﻿@model WebApplication3.Models.SubscriptionItems;
+
+@{
+    ViewData["Title"] = "Decisive Technologies";
+    Layout = "~/Views/Shared/_Layout-4.cshtml";
+}
+
+<main id="main" class="main">
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-4">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Subscription Details</h5>
+                        <p>Product name: @Model.name</p>
+                        <p>Licenses acquired: @Model.quantity</p>
+
+                        <!-- Basic Modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#BuyModal">
+                            Buy Licenses
+                        </button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#RemoveModal">
+                            Remove Licenses
+                        </button>
+                        <div class="modal fade" id="BuyModal" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered" id="modeldialog">
+                             
+                                <div class="modal-content" id="modalContent">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Buy Licenses</h5>
+                                       
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- General Form Elements -->
+                                        <form>
+                                            <label class="col-sm-4 col-form-label">Current Quantity</label>
+                                            <div class="row mb-3">
+                                                <label class="col-sm-5 col-form-label">Total licenses</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" value="@Model.quantity" disabled>
+                                                </div>
+                                            </div>
+
+                                            <div class="input-group mb-3">
+                                                <label class="col-sm-5 col-form-label">Monthly cost</label>
+                                                <span class="input-group-text">BWP</span>
+                                                <span class="input-group-text">@string.Format("{0:C}", Model.monthlyprice / 100)
+                                                </span>
+
+                                            </div>
+
+                                            <label class="col-sm-4 col-form-label">New Quantity</label>
+                                            <div class="row mb-3">
+                                                <label for="inputNumber" class="col-sm-5 col-form-label">Enter new quantity</label>
+                                                <div class="col-sm-5">
+                                                    <input type="number" class="form-control" id="newQuantity" min="1">
+                                                </div>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <label class="col-sm-5 col-form-label">New Monthly Total</label>
+                                                <span class="input-group-text">BWP</span>
+                                                
+                                                <span class="input-group-text" id="newMonthlyCost"></span>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <legend class="col-form-label col-sm-2 pt-0">Check boxes to complete</legend>
+                                                <div class="col-sm-10">
+
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                                        <label class="form-check-label" for="gridCheck1">
+                                                            New adjustments will be charged at prorated rate. 
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="gridCheck2" checked>
+                                                        <label class="form-check-label" for="gridCheck2">
+                                                            Adjustments will be charged against current payment method. If you would like use a different payment method, please edit your payment method and come back to purchase new licenses. 
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary" id="ConfirmOrder">Confirm Order</button>
+                                            </div>
+
+                                         
+
+                                        </form><!-- End General Form Elements -->
+                                       
+                                 
+                                </div>
+                            </div>
+                        </div><!-- End Basic Modal-->
+
+                           
+                    </div>
+
+
+                        <div class="modal fade" id="RemoveModal" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Remove Licenses</h5>
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="buyLicensesForm">
+                                            <div class="form-group">
+                                                <h4>Current quantity</h4>
+                                                <label for="currentQuantity">Total licenses</label>
+                                                <input type="text" id="currentQuantity" value="@Model.quantity" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="monthlyCost">Monthly cost</label>
+                                                <input type="text" id="monthlyCost" value="@Model.monthlyprice" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <h4>New Quantity</h4>
+                                                <label for="newQuantity">Total licenses</label>
+                                                <input type="number" id="newQuantity" placeholder="Enter new quantity">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="newMonthlyCost">New Monthly Cost</label>
+                                                <input type="number" id="newMonthlyCost" min="0" placeholder="Enter new monthly cost">
+                                            </div>
+                                           
+
+                                        </form>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Basic Modal-->
+                </div>
+
+
+
+            </div>
+            </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Subscription & Payment settings</h5>
+                        <p>Billing Interval: @Model.interval</p>
+                        <p>Subscription status: @Model.status</p>
+
+
+                        <!-- Vertically centered Modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
+                            Cancel Subscription
+                        </button>
+                        <p></p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
+                            Edit billing frequency
+                        </button>
+                        <p></p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
+                            Edit Recurring billing
+                        </button>
+                        <p></p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
+                            Edit Payment method
+                        </button>
+                        <p></p>
+
+                        <div class="modal fade" id="verticalycentered" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Vertically Centered</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Non omnis incidunt qui sed occaecati magni asperiores est mollitia. Soluta at et reprehenderit. Placeat autem numquam et fuga numquam. Tempora in facere consequatur sit dolor ipsum. Consequatur nemo amet incidunt est facilis. Dolorem neque recusandae quo sit molestias sint dignissimos.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End Vertically centered Modal-->
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Purchase Information</h5>
+                        <p>Unit Amount: @string.Format("{0:C}", Model.unitamount / 100) BWP</p>
+                        <p>Start Date: @Model.startdate</p>
+
+
+
+                        <!-- Vertically centered Modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
+                            View Product info
+                        </button>
+                        <div class="modal fade" id="verticalycentered" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Vertically Centered</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Non omnis incidunt qui sed occaecati magni asperiores est mollitia. Soluta at et reprehenderit. Placeat autem numquam et fuga numquam. Tempora in facere consequatur sit dolor ipsum. Consequatur nemo amet incidunt est facilis. Dolorem neque recusandae quo sit molestias sint dignissimos.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End Vertically centered Modal-->
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        let subitemid = '@Model.id';
+console.log(subitemid);
+        let priceid = '@Model.product';
+        console.log(priceid);
+        var unitamount = '@Model.unitamount';
+        console.log(unitamount);
+        let currentquantity = '@Model.quantity';
+        console.log(currentquantity);
+        let newquantity = document.querySelector('#newQuantity');
+        let totalquantity = document.querySelector('#newMonthlyCost');
+        newquantity.addEventListener('input', function (e) {
+            e.preventDefault(); // Prevent the default form submission behavior
+
+            // Retrieve form data and handle form submission as needed
+            let newtotalQuantity = document.querySelector('#newQuantity').value;
+
+
+            calculateNewTotal(newtotalQuantity, unitamount, currentquantity);
+          
+        });
+
+     
+        function calculateNewTotal(newtotalQuantity, unitamount, currentquantity) {
+            // Your AJAX request remains unchanged
+            var total = parseFloat(newtotalQuantity) + parseFloat(currentquantity);
+
+            console.log(currentquantity);
+            console.log(newtotalQuantity);
+            var unitcost = unitamount / 100;
+            console.log(unitcost);
+            console.log(total);
+            var newmonthlycost = total * unitcost;
+            console.log(newmonthlycost);
+            totalquantity.textContent = newmonthlycost.toFixed(2); // Update the total monthly cost
+        }
+
+
+        let confirmorder = document.querySelector('#ConfirmOrder');
+
+        confirmorder.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default form submission behavior
+
+            //change model to sinning section 
+            // perform ajax to buylicense handler
+            // Select the modal content
+            let modalContent = document.querySelector('#modalContent');
+            let modalDialog = document.querySelector('#modeldialog');
+
+            modalDialog.classList.add('modal-sm');
+            // Hide the current modal content and display the spinner
+            modalContent.innerHTML = `
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </div><!-- End Center aligned spinner -->
+        `;
+            let confirmedtotalQuantity = newquantity.value;
+           
+            console.log(confirmedtotalQuantity);
+            console.log(currentquantity);
+            var total = parseFloat(confirmedtotalQuantity) + parseFloat(currentquantity);
+            console.log(total);
+            console.log(total);
+            console.log(total);
+
+            incrementlicense(subitemid, priceid, total);
+           
+
+
+            // Add the modal-sm class to the modal dialog
+
+            });
+
+            function incrementlicense(subitemid, priceid, total)
+            {
+           
+            console.log(total);
+            $.ajax
+            ({
+                type: 'POST',
+                url: '/Portal/UpdateSubscription',
+                cache: false,
+                data: {
+                    "subitemid": subitemid,
+                    "priceid": priceid,
+                    "quantity": total
+                   
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Success) {
+                        // Update modal content with success message and close
+                            let modalContent = document.querySelector('#modalContent');
+                            let modalDialog = document.querySelector('#modeldialog');
+
+                            modalDialog.classList.add('modal-sm');
+                            // Hide the current modal content and display the spinner
+                            modalContent.innerHTML = `
+                        <div class="modal-body">
+                                <p>${response.Message}</p>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+            `;
+                       
+                    } else {
+                        // Handle error case
+                        console.error(response.ErrorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle AJAX error
+                    console.error(error);
+                }
+            });
+
+            }
+
+        function errorMessage(exception) {
+            // Handle error messages appropriately
+            // ... (Your existing errorMessage function code here)
+        }
+    });
+</script>

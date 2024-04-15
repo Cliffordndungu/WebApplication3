@@ -6,5 +6,7 @@
         bool IsAuthenticated();
 
         string GetSTPCustomerId();
+
+        string GettenandId();
     }
 }

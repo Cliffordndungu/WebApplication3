@@ -16,7 +16,7 @@ namespace WebApplication3.Data
         //    base.OnConfiguring(optionsBuilder);
         //    optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=App;User Id=decisive;Password=fatcat_88$$;TrustServerCertificate=True;");
         //}
-
+        public DbSet<Car> Cars { get; set; }
      
         public DbSet<User> Users => Set <User>();
 

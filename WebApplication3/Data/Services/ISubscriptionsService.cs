@@ -14,7 +14,7 @@ namespace WebApplication3.Data.Services
 
         //void UpdateCustomer(string customerId, string paymentMethodId);
 
-
+        void CustomerLicenseIncrement(string subitemid, string priceid, int quantity, string tenantid);
 
 
     }

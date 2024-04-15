@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stripe;
 using WebApplication3.Migrations;
+using System.Net.NetworkInformation;
 
 namespace WebApplication3
 {
@@ -268,9 +269,36 @@ namespace WebApplication3
 
         }
 
+        public async void licenseincrement(string priceid, int quantity, string tenantid)
+        {
+            string status = "subscribe";
+            if (_cache.TryGetValue(cachekey, out TokenResponse tokenResponse))
+            {
+                //token present
+                string accesstk = tokenResponse.access_token;
 
 
-        public async void setofferingAsync(string accesstoken, string status, string tenantid, string priceid, long quantity)
+                setofferingAsync(accesstk, status, tenantid, priceid, quantity);
+
+
+
+
+            }
+            else
+            {
+                string accesstk = await CreateToken();
+
+                setofferingAsync(accesstk, status, tenantid, priceid, quantity);
+
+                //Access token not found 
+
+
+
+            }
+        }
+
+
+            public async void setofferingAsync(string accesstoken, string status, string tenantid, string priceid, long quantity)
         {
             if (status == "subscribe")
             {
