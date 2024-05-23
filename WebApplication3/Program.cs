@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication3.Helpers;
 using WebApplication3.Data.Repository;
 using System.Globalization;
+using WebApplication3.Data.DPO;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.WebHost.UseEnvironment("Development"); // Setting the environment to Development
@@ -58,6 +59,7 @@ StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:SecretKey"];
 builder.Services.AddScoped<AcronisTokenService>();
 builder.Services.AddScoped<TwilioService>();
 builder.Services.AddScoped<ShoppingCart>();
+builder.Services.AddScoped<dpo>();
 builder.Services.AddScoped<OrdersService>();
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 //builder.Services.AddSingleton(stripeSettings);

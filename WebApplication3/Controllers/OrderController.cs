@@ -6,6 +6,7 @@ using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
 using WebApplication3.Data.Cart;
+using WebApplication3.Data.DPO;
 using WebApplication3.Data.Services;
 using WebApplication3.Data.ViewModels;
 using WebApplication3.Models;
@@ -13,19 +14,22 @@ using WebApplication3.Models;
 
 namespace WebApplication3.Controllers
 {
- 
+
     public class OrderController : Controller
     {
         private readonly ShoppingCart _shoppingCart;
         private readonly OrdersService _orderservice;
-        private readonly SubscriptionsService _subscriptionservice;
+      
         private readonly IUserService _userService;
-        public OrderController(ShoppingCart shoppingCart, OrdersService orderService, SubscriptionsService subscriptionsService, IUserService userservice)
+        private readonly dpo _dposervice;
+
+        public OrderController(ShoppingCart shoppingCart, OrdersService orderService,  IUserService userservice, dpo dposervice)
         {
             _shoppingCart = shoppingCart;
             _orderservice = orderService;
-            _subscriptionservice = subscriptionsService;
+    
             _userService = userservice;
+            _dposervice = dposervice;
         }
 
         [Route("Order/ShoppingCart")]
@@ -147,15 +151,15 @@ namespace WebApplication3.Controllers
         public async Task<IActionResult> Index()
         {
             string userId = "";
-           
+
 
             var orders = await _orderservice.GetOrdersByUserIdAsync(userId);
             return View(orders);
         }
 
-        
+
         public async Task<IActionResult> ShoppingCart()
-        
+
         {
             var items = _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
@@ -167,9 +171,9 @@ namespace WebApplication3.Controllers
             var productPrices = new List<ProductPrice>();
             var productDetails = new List<ProductDetails>();
 
-                foreach (var item in items)
-                {
-               
+            foreach (var item in items)
+            {
+
                 string productId = item.productid;
                 //if product id is ..
 
@@ -195,7 +199,7 @@ namespace WebApplication3.Controllers
 
                     var Invoiceservice = new InvoiceService();
                     var UpcomingPrice = Invoiceservice.Upcoming(options);
-                     long totalupcomingprice = UpcomingPrice.AmountDue / 100;
+                    long totalupcomingprice = UpcomingPrice.AmountDue / 100;
                     long unitcost = totalupcomingprice / storage;
 
 
@@ -207,8 +211,8 @@ namespace WebApplication3.Controllers
 
                     //Get productid 
                     //var product = service.Get(productId);
-                  
-                var product = service.Get(productId);
+
+                    var product = service.Get(productId);
                     if (product != null)
                     {
                         productDetails.Add(new ProductDetails
@@ -219,7 +223,7 @@ namespace WebApplication3.Controllers
                             Productdescription = product.Description,
 
                         });
-                       
+
                     }
 
 
@@ -255,23 +259,23 @@ namespace WebApplication3.Controllers
 
 
                 }
-                 }
-
-                var viewModel = new ShoppingCartVM
-                {
-                    ShoppingCart = _shoppingCart,
-                    ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotalAsync(),
-                    ProductPrices = productPrices, // Pass the list of product prices to the view model
-                    ProductDetails = productDetails, 
-                };
-
-                return View(viewModel);
             }
+
+            var viewModel = new ShoppingCartVM
+            {
+                ShoppingCart = _shoppingCart,
+                ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotalAsync(),
+                ProductPrices = productPrices, // Pass the list of product prices to the view model
+                ProductDetails = productDetails,
+            };
+
+            return View(viewModel);
+        }
 
         public async Task<IActionResult> Failed()
         {
 
-          
+
             return View();
         }
         public async Task<IActionResult> Complete()
@@ -361,28 +365,33 @@ namespace WebApplication3.Controllers
 
         public async Task<IActionResult> AddItemToShoppingCart(string id)
         {
-         _shoppingCart.AddItemToCart(id);
-            
-         return RedirectToAction(nameof(ShoppingCart));
+            _shoppingCart.AddItemToCart(id);
+
+            return RedirectToAction(nameof(ShoppingCart));
         }
-        
+
         [HttpPost]
 
-        public async Task<IActionResult> AddItemsToShoppingCart(int storagequantity, int devicequantity,string productid)
+        public async Task<IActionResult> AddItemsToShoppingCart(int storagequantity, int devicequantity, string productid)
         {
-           
-            _shoppingCart.AddItemsToCart(storagequantity, devicequantity,  productid);
+
+            _shoppingCart.AddItemsToCart(storagequantity, devicequantity, productid);
 
             return Json(new { success = true });
 
             //return RedirectToAction(nameof(ShoppingCart));
         }
 
-        
+
 
         [Authorize]
         public async Task<ActionResult> checkout()
         {
+            /// call DPO Method 
+            /// DPOIntegration
+            /// 
+
+        
 
             var stpcustomerid = _userService.GetSTPCustomerId();
             // Fetch products and quantities from the shopping cart
@@ -416,7 +425,7 @@ namespace WebApplication3.Controllers
                 LineItems = lineItems,
                 Mode = "subscription",
                 SuccessUrl = domain + "/Complete",
-                
+
                 CancelUrl = domain + "/Failed",
             };
             //var service = new SessionService();
@@ -426,7 +435,7 @@ namespace WebApplication3.Controllers
             //return new StatusCodeResult(303);
 
             // Use Dependency Injection to inject
-                       //
+            //
             // SessionService
             var service = new SessionService();
             try
@@ -447,5 +456,20 @@ namespace WebApplication3.Controllers
                 return View("Error");
             }
         }
+
+
+       
+
+
+
+
+
+
+
+    
     }
-}
+    }
+
+
+ 
+

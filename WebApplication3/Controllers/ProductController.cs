@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Stripe;
 using WebApplication3.Data.Cart;
+using WebApplication3.Data.DPO;
 using WebApplication3.Data.ViewModels;
 using WebApplication3.Models;
 
@@ -10,13 +11,41 @@ namespace WebApplication3.Controllers
     public class ProductController : Controller
     {
         private readonly ShoppingCart _shoppingCart;
+        private readonly dpo _dposervice;
 
-        public ProductController(ShoppingCart shoppingCart)
+        public ProductController(ShoppingCart shoppingCart, dpo dposervice)
         {
             _shoppingCart = shoppingCart;
+            _dposervice = dposervice;
+        }
+
+        public async Task<IActionResult> DPOIntegration()
+        {
+
+            string tokenResponse = await _dposervice.CreateToken();
+
+            // Verify token
+            string verifyResponse = await _dposervice.VerifyToken(tokenResponse);
+            // Check verification response for success
+
+            // If verification successful, get payment URL
+            string paymentUrl = _dposervice.GetPaymentUrl(tokenResponse);
+
+            // Redirect user to payment URL
+            return Redirect(paymentUrl);
+
+            // Extract transToken from tokenResponse
+
+
         }
         public async Task<IActionResult> Index()
         {
+
+         
+
+            //return Redirect(session.Url); // Redirect user to Stripe checkout
+
+
             List<Products> products = new List<Products>();
             var options = new ProductListOptions
             {
