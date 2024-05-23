@@ -1,38 +1,71 @@
 ﻿@inject UserManager<ApplicationUser> UserManager;
+
 @if(!User.Identity.IsAuthenticated)
 {
-    <a class="btn btn-outline-success my-2 my-sm-0" asp-controller="Account" asp-action="Login">
+    @*<a class="btn btn-outline-success my-2 my-sm-0" asp-controller="Account" asp-action="Login">
         <i class="bi bi-box-arrow-in-right">Login</i>
     </a>
     <span style="padding: 5px;"></span>
     <a class="btn btn-outline-primary my-2 my-sm-0" asp-controller="Account" asp-action="Register">
         <i class="bi bi-person-plus">Register</i>
-    </a>
+    </a>*@
+
+    <li><a class="nav-link scrollto" asp-controller="Account" asp-action="Login">Login</a></li>
+    <li><a class="getstarted scrollto" asp-controller="Account" asp-action="Register">Start Free Trial</a></li>
 }
 else
 {
 
     @*User profile section*@
+   @* <li>
+        <a href="/portal/home">
+            <i class="bi bi-house"></i>
+
+        </a>
+   </li>*@
+
+    <li class="dropdown">
+        <a href="#"><i class="bi bi-person-badge bi-chevron-down"></i></a>
+        <ul>
+
+            <li class="dropdown">
+                <a asp-controller="Order" asp-action="ShoppingCart"><span>Shopping Cart</span> </a>
+                <a asp-controller="Portal" asp-action="Home"><span>Customer Portal</span> </a>
+               
+            </li>
+          
+
+
+        </ul>
+    </li>
+   
+
+  @* <li>
     <div class="dropdown">
-        <button class="btn btn-outline-success dropdown-toggle" type="button" id="profile-btn" data-toggle="dropdown"
+          
+            <button class="button dropdown-toggle" type="button" id="profile-btn" data-toggle="dropdown"
                 aria-expanded="false">
-            <i class="bi bi-person-badge"></i> Hello @User.FindFirst("UserFirstName").Value
-           @* <i class="bi bi-person-badge"></i> Hello @UserManager.GetUserName(User)*@
+            <i class="bi bi-person-badge"></i> @User.FindFirst("UserFirstName").Value
+            <i class="bi bi-person-badge"></i> Hello @UserManager.GetUserName(User)
         </button>
         <ul class="dropdown-menu" aria-labelledby="profile-btn">
             <li>
-                <a class="dropdown-item" asp-controller="Order" asp-action="Index">
-                    <i class="bi bi-list"></i> Orders
+                <a class="dropdown-item" asp-controller="Order" asp-action="ShoppingCart">
+                    <i class="bi bi-list"></i> Shopping Cart
                 </a>
             </li>
+             <li>
+                <a class="dropdown-item" asp-controller="Portal" asp-action="Home">
+                    <i class="bi bi-list"></i> Customer Portal
+                </a>
+            </li>
+            
+
         </ul>
     </div>
+    </li>*@
 
-    <span style="padding: 5px;"></span>
-    <form asp-controller="Account" asp-action="Logout">
-        <button class="btn btn-outline-danger my-2 my-sm-0">
-            <i class="bi bi-box-arrow-in-right"></i> Logout
-        </button>
-    </form>
+    <li><a class="nav-link scrollto" asp-controller="Account" asp-action="Logout">Logout</a></li>
+    
 
 }

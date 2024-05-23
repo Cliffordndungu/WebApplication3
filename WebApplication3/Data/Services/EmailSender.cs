@@ -101,5 +101,14 @@ namespace WebApplication3.Data.Services
         return text;
 
         }
+
+        public async Task SendEmailOrderConfirmation(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceholders("Hello {{UserName}},We have recieved your order.", userEmailOptions.Placeholders);
+            userEmailOptions.Body = UpdatePlaceholders(GetEmailBody("OrderSuccess"), userEmailOptions.Placeholders);
+            await SendEmail(userEmailOptions);
         }
+
+
+    }
 }

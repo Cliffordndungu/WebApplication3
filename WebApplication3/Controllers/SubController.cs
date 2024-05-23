@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Differencing;
 using Newtonsoft.Json;
 using Stripe;
+using WebApplication3.Data.Services;
 using WebApplication3.Models;
 
 namespace WebApplication3.Controllers
@@ -10,11 +11,14 @@ namespace WebApplication3.Controllers
     public class SubController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
+        private readonly ISubscriptionsService _subservice;
 
-        public SubController(UserManager<ApplicationUser> userManager)
+        public SubController(UserManager<ApplicationUser> userManager, IUserService userservice, ISubscriptionsService subservice)
         {
             _userManager = userManager;
-
+            _userService = userservice;
+            _subservice = subservice;
         }
         public async Task<IActionResult> IndexAsync()
         {
@@ -84,20 +88,22 @@ namespace WebApplication3.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> UpdateSubscriptionHandler(string Subid, long Quantity)
+       
+        public JsonResult UpdateSubscription(string subitemid, string priceid)
         {
+
+            string tenantid =  _userService.GettenandId();
+            int quantity = 10;
+
             try
             {
+                _subservice.CustomerLicenseIncrement(subitemid,  priceid, quantity, tenantid);
 
-                var options = new SubscriptionItemUpdateOptions
+                return Json(new
                 {
-                    Quantity = Quantity
-                };
-                var service = new SubscriptionItemService();
-                var response = service.Update(Subid, options);
-
-
-                return Json(JsonConvert.SerializeObject(response, Formatting.Indented));
+                    Success = true,
+                    Message = "Operation completed successfully."
+                });
             }
             catch (StripeException e)
             {

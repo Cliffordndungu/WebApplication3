@@ -10,7 +10,15 @@ namespace WebApplication3.Models
         public string productid { get; set; }
         public decimal price { get; set; }
         public string Name { get; set; }
-       
 
+        public string Description { get; set; }
+
+        public string ImageUrl { get; set; }
+
+        public string featureset { get; set; }
+
+        public string featurelist { get; set; }
+
+        public string compatibility { get; set; }
     }
 }

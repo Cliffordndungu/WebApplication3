@@ -1,0 +1,164 @@
+﻿@using WebApplication3.Data.ViewModels;
+@model ShoppingCartVM
+
+@{
+    ViewData["Title"] = "Decisive Technologies";
+    Layout = "~/Views/Shared/_Layout-7.cshtml";
+}
+
+<div class="container">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <span class="pull-right">(<strong>5</strong>) items</span>
+                        <h5>Items in your cart</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table shoping-cart-table">
+                                <tbody>
+
+                             @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
+                                        {
+                                        var productDetails = Model.ProductDetails.FirstOrDefault(pd => pd.ProductId == item.productid);
+                                            var productPrice = Model.ProductPrices.FirstOrDefault(pp => pp.ProductId == item.productid);
+                                            var subtotal = (productPrice?.Price ?? 0) * item.quanitity; // Calculate the subtotal
+
+                                    <tr>
+                                        <td width="90">
+                                            <div class="cart-product-imitation">
+                                            </div>
+                                        </td>
+                                        <td class="desc">
+                                            <h3>
+                                                <a href="#" class="text-navy">
+                                                        @productDetails?.Productname
+                                                </a>
+                                            </h3>
+                                            <p class="small">
+                                                    @productDetails?.Productname
+                                            </p>
+                                            <dl class="small m-b-none">
+                                                <dt>Subscription Term: 12 Months</dt>
+                                                <dd>Cloudbackup, Antimalware protection, Device Control & Vulnerability Assesmenets</dd>
+                                                <dd>Delivery Method: Digital </dd>
+                                            </dl>
+                                            <div class="m-t-sm">
+                                                <a href="#" class="text-muted"><i class="fa fa-gift"></i> Include Onsite Installation</a>
+                                                |
+                                                <a href="#" class="text-muted"><i class="fa fa-trash"></i> Remove item</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                        @productPrice?.Price.ToString("c")
+                                          @*  <s class="small text-muted">P230,00</s>*@
+                                        </td>
+                                        <td width="65">
+                                        <input type="text" class="form-control" placeholder="@item.quanitity">
+                                        </td>
+                                        <td>
+                                            <h4>
+                                            @subtotal.ToString("c")
+                                            </h4>
+                                        </td>
+                                    </tr>
+                            }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                       
+                    </div>
+                <button class="btn btn-primary pull-right" onclick="checkout()">
+                    <i class="fa fa fa-shopping-cart"></i> Checkout
+                </button>
+                <button class="btn btn-white" onclick="continueShopping()">
+                    <i class="fa fa-arrow-left"></i> Continue shopping
+                </button>
+                </div>
+          
+           
+      
+            <div class="col-md-3">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Cart Summary</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <span>
+                            Total
+                        </span>
+                        <h2 class="font-bold">
+                                                @Model.ShoppingCartTotal.ToString("c")
+                        </h2>
+                        <hr>
+                        <span class="text-muted small">
+
+                        </span>
+                        <div class="m-t-sm">
+                            <div class="btn-group">
+                                <a class="btn btn-primary btn-sm" asp-action="checkout"><i class="fa fa-shopping-cart"></i> Checkout</a>
+                                <a href="#" class="btn btn-white btn-sm"> Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Support</h5>
+                    </div>
+                    <div class="ibox-content text-center">
+                        <h3><i class="fa fa-phone"></i> +267 71454117</h3>
+                        <span class="small">
+                            Please contact with us if you have any questions. We are avalible 24h.
+                        </span>
+                    </div>
+                </div>
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <p class="font-bold">
+                            Other products you may be interested
+                        </p>
+                        <hr>
+                        <div>
+                            <a href="#" class="product-name"> Mailbox Security</a>
+                            <div class="small m-t-xs">
+                                Many desktop publishing packages and web page editors now.
+                            </div>
+                            <div class="m-t text-righ">
+                                <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                            </div>
+                        </div>
+                        <hr>
+                        <div>
+                            <a href="#" class="product-name"> Cyber Protect Plus Workstations</a>
+                            <div class="small m-t-xs">
+                                Many desktop publishing packages and web page editors now.
+                            </div>
+                            <div class="m-t text-righ">
+                                <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkout() {
+        // Define what should happen when the checkout button is clicked
+        // For example, you can redirect to a checkout page
+        window.location.href = "/Order/checkout";
+    }
+
+    function continueShopping() {
+        // Define what should happen when the continue shopping button is clicked
+        // For example, you can redirect to the product index page
+        window.location.href = "/Product/Index";
+    }
+</script>

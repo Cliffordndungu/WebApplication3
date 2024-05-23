@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
 using WebApplication3.Data.Cart;
+using WebApplication3.Data.Services;
 using WebApplication3.Migrations;
 using static WebApplication3.Models.StripeModel;
 
@@ -11,9 +12,14 @@ namespace WebApplication3.Controllers
     public class SubscriptionController : Controller
     {
         private readonly ShoppingCart _shoppingCart;
-        public SubscriptionController(ShoppingCart shoppingCart)
+        private readonly IUserService _userService;
+        private readonly ISubscriptionsService _subservice;
+
+        public SubscriptionController(ShoppingCart shoppingCart,IUserService userservice, ISubscriptionsService subservice)
         {
             _shoppingCart = shoppingCart;
+            _userService = userservice;
+            _subservice = subservice;
         }
 
         [HttpPost]
@@ -89,6 +95,32 @@ namespace WebApplication3.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateSubscription(string subitemid, string priceid, int quantity)
+        {
+
+            string tenantid = _userService.GettenandId();
+
+            try
+            {
+                _subservice.CustomerLicenseIncrement(subitemid, priceid, quantity, tenantid);
+
+                return Json(new
+                {
+                    Success = true,
+                    Message = "Operation completed successfully."
+                });
+            }
+            catch (StripeException e)
+            {
+                return Json(new
+                {
+                    Success = "False",
+                    responseText = e.Message
+                });
+            }
         }
 
         [HttpGet]

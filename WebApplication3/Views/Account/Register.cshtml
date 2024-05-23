@@ -5,83 +5,199 @@
 
 @{
     ViewData["Title"] = "Sign up for new account";
+    Layout = "~/Views/Shared/_Layout-2.cshtml";
 }
 
-<div class="row">
-    <div class="col-md-6 offset-3">
+<div class="container">
 
-        <p>
-            <h4>
-                Sign up for new account. 
-            </h4>
-        </p>
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-        @if (TempData["Error"] != null)
-        {
-            <div class="col-md-12 alert-danger">
-                <span><b>Sorry!</b> - @TempData["Error"]</span>
-            </div>
-        }
-        <div class="row">
-            <div class="col-md-8 offset-2">
-                <form asp-action="Register">
-                    <div asp-validation-summary="ModelOnly" class="text-danger">
+                    <div class="d-flex justify-content-center py-4">
+                        <a href="index.html" class="logo d-flex align-items-center w-auto">
+                            <img src="assets-2/img/Decisivelogo.png" alt="">
+                            <span class="d-none d-lg-block">Decisive Technologies</span>
+                        </a>
+                        </a>
+                    </div><!-- End Logo -->
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="col-md-12 alert-danger">
+                            <span><b>Sorry!</b> - @TempData["Error"]</span>
+                        </div>
+                    }
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="pt-4 pb-2">
+                                <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
+                                <p class="text-center small">Enter your details to create account. 30 Day Trial available.</p>
+                            </div>
+
+                            <form asp-action="Register">
+                                <div asp-validation-summary="ModelOnly" class="text-danger">
+                                </div>
+                              
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="fullname" class="form-label"></label>
+                                        <input asp-for="fullname" class="form-control" />
+                                        <div class="invalid-feedback">
+                                        <span asp-validation-for="fullname" class="text-danger">
+                                        </span>
+                                        </div>
+                                    </div>
+                                   
+                                   
+                                </div>
+
+                                @*<div class="col-md-6">
+
+
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" name="lastName" class="form-control" id="lastName" required>
+                                    <div class="invalid-feedback">Please, enter your last name!</div>
+                                </div>*@
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="emailaddress" class="form-label"></label>
+                                        <input asp-for="emailaddress" class="form-control" />
+                                        <div class="invalid-feedback">
+                                            <span asp-validation-for="emailaddress" class="text-danger">
+                                            </span>
+
+                                        </div>
+                                        
+                                    </div>
+                                  
+                                    
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="phoneNumber" class="form-label">Phone Number</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text" id="inputGroupPrepend">+267</span>
+                                            <input type="tel" asp-for="phoneNumber" id="phoneNumber" class="form-control" />
+                                        </div>
+                                        <div class="input-group has-validation">
+                                            <button id="sendVerificationCode" class="btn btn-primary mt-2">Send Verification Code</button>
+                                        </div>
+                                        <div class="input-group has-validation">
+                                            <div class="invalid-feedback">Please enter a valid phone number.</div>
+</div>
+                                        <div class="input-group has-validation">
+                                            <input type="text" id="verificationCode" class="form-control mt-2" placeholder="Enter Verification Code" />
+                                        </div>
+                                       
+                                        
+                                       
+                                    </div>
+
+                                   
+                                    
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="isRepresentingCompany" type="checkbox" value="" id="representingCompany">
+                                        <label class ="form-label" for="representingCompany">Are you representing a company?</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="companyname" class="form-label"></label>
+                                        <input asp-for="companyname" class="form-control" />
+
+                                        
+                                    </div>
+                                   
+                                </div>
+
+                                <div class="col-12">
+                                <div class="form-group">
+                                        <label asp-for="SelectedLocation" class="form-label"></label>
+                                    <select asp-for="SelectedLocation" class="form-control">
+                                        @foreach (var location in Enum.GetValues(typeof(DataCenterLocation)))
+                                        {
+                                            <option value="@location">@location</option>
+                                        }
+                                    </select>
+                                </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="Password" class="form-label"></label>
+                                        <input id="Password" asp-for="Password" class="form-control" />
+                                        <div class="invalid-feedback">
+                                            <span asp-validation-for="Password" class="text-danger">
+                                            </span>
+                                        </div>
+                                        
+                                    </div>
+                                  
+                                   
+                                   
+                                   
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                                        <input id="ConfirmPassword" asp-for="ConfirmPassword" class="form-control" />
+                                        <div class="invalid-feedback">
+                                            <span asp-validation-for="ConfirmPassword" class="text-danger">
+                                            </span>
+                                        </div>
+                                       
+                                    </div>
+                                  
+                                   
+                                   
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+                                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
+                                        <div class="invalid-feedback">You must agree before submitting.</div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="form-group">
+                                        <button class="btn btn-primary w-100" id="registerBtn" type="submit">Create Account</button>
+                        
+                       
                     </div>
-                    <div ckass="form-group">
-                        <label asp-for="fullname" class="control-label"></label>
-                        <input asp-for="fullname" class="form-control" />
-                        <span asp-validation-for="fullname" class="text-danger">
-                        </span>
-                    </div>
-                    <div ckass="form-group">
-                        <label asp-for="companyname" class="control-label"></label>
-                        <input asp-for="companyname" class="form-control" />
-                      
-                        </span>
-                    </div>
-                    <div ckass="form-group">
-                        <label asp-for="emailaddress" class="control-label"></label>
-                        <input asp-for="emailaddress" class="form-control" />
-                        <span asp-validation-for="emailaddress" class="text-danger">
-                        </span>
-                    </div>
-                    <!-- Add a section for phone number verification -->
-                    <div class="form-group">
-                        <label asp-for="phoneNumber">Phone Number</label>
-                        <input type="tel" asp-for="phoneNumber" id="phoneNumber" class="form-control" />
-                        <button id="sendVerificationCode" class="btn btn-primary mt-2">Send Verification Code</button>
-                        <input type="text" id="verificationCode" class="form-control mt-2" placeholder="Enter Verification Code" />
+                
+                               
+                                   
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <p class="small mb-0">Already have an account? <a asp-controller="Account" asp-action="Login">Log in</a></p>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
 
-                    <div ckass="form-group">
-                        <label asp-for="SelectedLocation" class="control-label"></label>
-                        <select asp-for="SelectedLocation" class="form-control">
-                            @foreach (var location in Enum.GetValues(typeof(DataCenterLocation)))
-                            {
-                                <option value="@location">@location</option>
-                            }
-                        </select>
-                    </div>
-                    <div ckass="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input id="Password" asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger">
-                        </span>
-                    </div>
-                    <div ckass="form-group">
-                        <label asp-for="ConfirmPassword" class="control-label"></label>
-                        <input id="ConfirmPassword" asp-for="ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger">
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <input id="registerBtn" class="btn btn-outline-success float-right" type="submit" value="Sign Up" />
-                        <a class="btn btn-outline-secondary"  asp-controller="Product" asp-action="Index">Cancel</a>
-                    </div>
-                </form>
+
+
+
+                </div>
             </div>
         </div>
-    </div>
+
+    </section>
 
 </div>
 
@@ -94,7 +210,7 @@
         let verificationBtn = document.querySelector('#sendVerificationCode');
         let registerBtn = document.querySelector('#registerBtn');
         let serviceSid;
-      
+
         // Disable fields initially
         verificationBtn.disabled = true;
         verificationCodeInput.disabled = true;
@@ -106,11 +222,11 @@
             const countryCode = '+267';
             return countryCode + phoneNumberInput.value.trim();
         }
-        
+
 
         phoneNumberInput.addEventListener('input', function () {
             const phoneNumber = this.value.trim();
-         
+
             // Enable verification button if phone number is valid (8 digits and starts with 7)
             if (/^7\d{7}$/.test(phoneNumber)) {
                 verificationBtn.disabled = false;
@@ -134,8 +250,8 @@
                 },
                 success: function (response) {
                     // On successful response from Twilio, enable verification input
-                   //store ServiceSid
-                   serviceSid = response.service;
+                    //store ServiceSid
+                    serviceSid = response.service;
                     console.log(response.service);
                 },
                 error: function () {
@@ -148,30 +264,32 @@
         verificationCodeInput.addEventListener('input', function () {
             const enteredCode = this.value.trim();
             if (enteredCode.length === 6) {
-                
+
                 const phoneNumberWithCountryCode = formatPhoneNumber();
-            $.ajax({
-                type: "GET",
-                url: "/Account/PhoneNumberVerificationCheckHandler",
-                data: {
-                    phoneNumber: phoneNumberWithCountryCode,
-                    code: enteredCode,
-                    serviceSid: serviceSid // Pass the stored serviceSid here
-                },
-                success: function (response) {
-                    // Enable password fields and register button upon correct verification code
-                    passwordInput.disabled = false;
-                    confirmPasswordInput.disabled = false;
-                    registerBtn.disabled = false;
-                },
-                error: function () {
-                    console.log("Error verifying code");
-                }
-            });
-           }
+                $.ajax({
+                    type: "GET",
+                    url: "/Account/PhoneNumberVerificationCheckHandler",
+                    data: {
+                        phoneNumber: phoneNumberWithCountryCode,
+                        code: enteredCode,
+                        serviceSid: serviceSid // Pass the stored serviceSid here
+                    },
+                    success: function (response) {
+                        // Enable password fields and register button upon correct verification code
+                        passwordInput.disabled = false;
+                        confirmPasswordInput.disabled = false;
+                        registerBtn.disabled = false;
+                    },
+                    error: function () {
+                        console.log("Error verifying code");
+                    }
+                });
+            }
 
         });
 
-      
+
     });
 </script>
+
+

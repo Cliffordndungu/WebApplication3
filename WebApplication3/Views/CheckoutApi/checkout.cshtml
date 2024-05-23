@@ -1,71 +1,236 @@
-﻿@using WebApplication3.Data.ViewModels; 
+﻿﻿@using WebApplication3.Data.ViewModels;
 @model ShoppingCartVM;
 @using Microsoft.Extensions.Options;
 @inject IOptions<WebApplication3.Data.Stripe.StripeSettings> StripeSettings
 @inject UserManager<ApplicationUser> UserManager;
 
-<div class="subscription-section">
-<div class="text-center">
 
-    @*BEGIN Loading Screen*@
-    <div id="ProgressBackground" style="display: none;"></div>
-    <div id="Progress" style="display: none;">
-        <img src="~/images/loading.gif" alt="loading" />
+@{
+    ViewData["Title"] = "Decisive Technologies";
+    Layout = "~/Views/Shared/_Layout-3.cshtml";
+}
+
+<!-- ======= Breadcrumbs ======= -->
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Order</li>
+        </ol>
+
+
     </div>
-    @*END Loading Screen*@
-<main id="main" class="loading">
-    @*BEGIN Subscriptions*@
+</section><!-- End Breadcrumbs -->
 
-        <div id="subscriptions">
-        @*BEGIN Card Element*@
-        <div id="divCardElement">
-            <div class="paymentform">
-                <section>
-                    <h2>Payment Information</h2>
-                    <fieldset>
-                        <label>
-                            <span>Name</span>
-                            <input name="name" id="name" class="field" placeholder="Tshepo Modise" required />
-                        </label>
-                        <label>
-                            <span>Email</span>
-                            <input name="email" id="email" type="email" class="field" placeholder="tshepo@example.com" required />
-                        </label>
-                    </fieldset>
-                    <fieldset>
-                        <label>
-                            <div id="card-element" class="field StripeElement SE"></div>
-                        </label>
-                    </fieldset>
-                </section>
-                <div class="form-group">
-                    <input type="submit" ID="paymentButton" class="payment-button button" Text="Pay" />
+<section class="inner-page">
+    <div class="container">
+
+        <!-- Product Checkout Container -->
+        <div class="row mb-4 product-checkout">
+            <div class="col-lg-12">
+                <div class="d-flex align-items-center mb-3">
+                    <!-- Product Icon -->
+                    <!-- Section for Logo -->
+                    <div class="logo-section me-3">
+                        <img src="~/assets/img/logo.png" alt="Product Icon" width="120" height="120">
+                    </div>
+
+                    <!-- Section for Product Name and Bullet Points -->
+                    <div class="product-info-section">
+                        <!-- Product Name with Info Icon -->
+                        <h4 class="mb-2">
+                            Decisive Cyber Protect
+                            <i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Product Information"></i>
+                        </h4>
+
+                        <!-- Bullet Points under Decisive Cyber Protect (Small Font) -->
+                        <ul class="small-font">
+                            <li>
+                                This subscription term: 1 year
+                            </li>
+                            <li>3 devices</li>
+                            <li>VPN for 1 user account on all devices</li>
+                            <li>Renewal: P39.99 per year</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Bullet Points under Decisive Cyber Protect (Small Font) -->
+
+
+
+
+
+                <ul>
+                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> How subscription works: Your subscription starts the day of purchase and will automatically renew each term so your protection is uninterrupted. We will email you a reminder about the upcoming charge, and you will be charged at the undiscounted price (which is subject to change) before the next subscription term begins. You can cancel anytime. <a href="#">Read more</a></li>
+                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> How recurring payments work: Our official reseller Nexway will charge your stored payment method at the renewal price applicable at that time.</li>
+                    <li><i class="fas fa-exclamation-circle text-danger me-2"></i> This licence сan't be activated outside Africa*. A My Kaspersky account is required.</li>
+                </ul>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-blue">Delivery Method</th>
+                            <th class="text-blue">Quantity</th>
+                            <th class="text-blue">Cloud Storage (GB)</th>
+                            <th class="text-blue">Price (BWP)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Digital</td>
+                            <td>2</td>
+                            <td>50</td>
+                            <td>200</td>
+                        </tr>
+                        <!-- Add more rows if needed -->
+                    </tbody>
+                </table>
+                <div class="text-end">
+                    <!-- Total Amount in Red with Currency (Slightly Larger Font) -->
+                    <p class="total-amount"><strong>Total:</strong> <span class="text-danger">P400.00 </span></p>
+
                 </div>
             </div>
         </div>
-        @*END Card Element*@
 
-        <div id="card-errors" class="element-errors"></div>
-   </div>
-    @*END Subscriptions*@
 
-    @*BEGIN CONFIRMATION*@
-    <div id="confirmation">
-        <div class="status success">
-            <h1>Thanks for your order!</h1>
-            <p>Woot! You successfully made a subscription payment with Stripe.</p>
-            <p id="pInvoice"></p>
-            <p id="pCustomer"></p>
+        <!-- Billing Information Section -->
+        <div class="row form-section billing-info">
+            <div class="col-lg-6">
+                <h3>1. Enter Your Billing Information</h3>
+                <form action="forms/billing.php" method="post" role="form">
+                    <!-- Input fields for billing information -->
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    <span class="small-text">Purchase details will be sent to this email.</span>
+
+                    <label for="country">Country</label>
+                    <select id="country" name="country" required>
+                        <!-- Add options for countries here -->
+                        <option value="country1">Botswana</option>
+                        <option value="country2">Country 2</option>
+                        <!-- Add more options as needed -->
+                    </select>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="name" name="first-name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" name="last-name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+
+                    <label for="town-city">Town/City</label>
+                    <input type="text" id="town-city" name="town-city" required>
+
+                    <div class="termsconditionlabel">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="acceptTerms" required>
+                        </div>
+                        <div class="text-container">
+                            <label for="acceptTerms">I allow Decisive Technolgies to use my email address, first name and last name to contact me with personalized special offers and information, understanding that I can withdraw my consent at any time. I understand and agree that my data will be handled as described in the Privacy Policy.</label>
+                        </div>
+                    </div>
+                    <!-- Add more fields as needed -->
+                </form>
+            </div>
+
+
+
+            <!-- Payment Details Section -->
+
+            <div class="col-lg-6 ">
+                <h3>2. Enter Your Payment Details</h3>
+
+
+                <main id="main" class="loading">
+                    @*BEGIN Subscriptions*@
+
+                    <div id="subscriptions">
+                        @*BEGIN Card Element*@
+                        <div id="divCardElement">
+                            <div class="paymentform">
+                                <section>
+                                    <fieldset>
+                                        <label>
+                                            <span>Name</span>
+                                            <input name="name" id="name" class="field" placeholder="Tshepo Modise" required />
+                                        </label>
+                                        <label>
+                                            <span>Email</span>
+                                            <input name="email" id="email" type="email" class="field" placeholder="tshepo@example.com" required />
+                                        </label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <label>
+                                            <div id="card-element" class="field StripeElement SE"></div>
+                                        </label>
+                                    </fieldset>
+                                </section>
+                                <!-- Checkbox with text on the side -->
+                                <div class="termsconditionlabel">
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" id="acceptTerms" required>
+                                    </div>
+                                    <div class="text-container">
+                                        <label for="acceptTerms">I accept the Subscription & Auto-Renewal Conditions, Terms & conditions and Privacy Policy.</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" id="paymentButton" class="btn buynowbutton mt-3">Buy Now</button>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        @*END Card Element*@
+
+                        <div id="card-errors" class="element-errors"></div>
+                    </div>
+                    @*END Subscriptions*@
+
+                    @*BEGIN CONFIRMATION*@
+                    <div id="confirmation">
+                        <div class="status success">
+                            <h1>Thanks for your order!</h1>
+                            <p>Woot! You successfully made a subscription payment.</p>
+                            <p id="pInvoice"></p>
+                            <p id="pCustomer"></p>
+                        </div>
+                        <div class="status error">
+                            <h1>Oops, payment failed.</h1>
+                            <p>It looks like your order could not be paid at this time. Please try again or select a different payment option.</p>
+                            <p class="error-message"></p>
+                        </div>
+                    </div>
+                    @*END CONFIRMATION*@
+                </main>
+                   
+
+
+            </div>
+
+
         </div>
-        <div class="status error">
-            <h1>Oops, payment failed.</h1>
-            <p>It looks like your order could not be paid at this time. Please try again or select a different payment option.</p>
-            <p class="error-message"></p>
+</section>
+<div class="subscription-section">
+    <div class="text-center">
+
+        @*BEGIN Loading Screen*@
+        <div id="ProgressBackground" style="display: none;"></div>
+        <div id="Progress" style="display: none;">
+            <img src="~/images/loading.gif" alt="loading" />
         </div>
+        @*END Loading Screen*@
+       
     </div>
-    @*END CONFIRMATION*@
-    </main>
-</div>
 </div>
 @*BEGIN Card and other Payment Methods Custom Script*@
 <script type="text/javascript">
@@ -77,10 +242,10 @@
     //var PriceId = 'Model.PriceId';
     //var Amount = Model.Amount;
     var username = '@UserManager.GetUserName(User)';
-  
+
     var Currency = 'bwp';
     var AmountFormated = formatPrice(totalAmount, Currency);
-  
+
     var stripeElements = stripe.elements();
 
     var mainElement = document.getElementById('main');
@@ -111,7 +276,7 @@
     card.addEventListener('change', function (event) {
         if (event.error) {
             errorMessage(event.error.message);
-            
+
         } else {
             errorMessage('', false);
 
@@ -292,11 +457,7 @@
             progressBackground.style.display = 'none';
         }
     }
-    
+
 </script>
-
-
-   
-
 
 

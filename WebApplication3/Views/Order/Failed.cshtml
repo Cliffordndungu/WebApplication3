@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Decisive Technologies";
+    Layout = "~/Views/Shared/_Layout-8.cshtml";
+}
+<main id="main">
+    <section id="fhero" class="d-flex align-items-center">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6  order-lg-2 order-1 hero-img" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="assets/img/hero-img.png" class="img-fluid animated" alt="">
+                </div>
+                <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                    <h1>Sorry, we couldnt process your order!</h1>
+                    <h2>Don't worry, All your items selected are still available in your cart. To Checkout, please visit your shopping cart. </h2>
+                    <div class="d-flex justify-content-center justify-content-lg-start">
+                        <a asp-controller="Order" asp-action="Cart" class="btn-get-started scrollto">Shopping Cart</a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section><!-- End Hero -->
+
+
+
+
+
+</main><!-- End #main -->

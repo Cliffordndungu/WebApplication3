@@ -17,6 +17,7 @@ namespace WebApplication3.Controllers
         private readonly DataContext _context;
         private readonly TwilioService _twilio;
         private readonly IAccountRepository _accountRepository;
+
       
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, DataContext context, TwilioService twilio, IAccountRepository accountRepository)
         {
@@ -43,7 +44,7 @@ namespace WebApplication3.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, loginvm.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index", "Product");
+                        return RedirectToAction("Home", "Portal");
                     }
                     if(result.IsNotAllowed)
                     {
@@ -91,6 +92,10 @@ namespace WebApplication3.Controllers
                     if (newuserresponse.Succeeded)
                     {
                         await _accountRepository.GenerateEmailConfirmationTokenAsync(newUser);
+
+                        //create stripe account here & save to customer 
+                        await _accountRepository.CreateCustomer(newUser.FullName, newUser.Email, newUser.Id);
+
                     };
                 }
                 else
@@ -161,11 +166,11 @@ namespace WebApplication3.Controllers
 
         }
 
-        [HttpPost]
+       
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Product");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

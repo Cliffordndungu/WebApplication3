@@ -1,52 +1,220 @@
 ﻿
 @model List<WebApplication3.Models.Products>
 
+
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Decisive Technologies";
+    Layout = "~/Views/Shared/_Layout-3.cshtml";
 }
 
-<div class="row">
-    @foreach (var item in Model)
-    {
-        <div class="col-md-4 col-xs-6 border-primary mb-3">
-            <div class="card mb-3" style="max-width: 540px;">
-                <div class="row g-0">
-                    <div class="col-md-12">
-                        <div class="card-header text-white bg-info">
-                            <p class="card-text">
-                                <h5 class="card-title">
-                               @*     @item.Name
-                                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                                    {
-                                        <a class="text-white float-right" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
-                                    }*@
-                                </h5>
-                            </p>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="col-md-6">
-                        <img src="@item.ImageUrl" width="100%" alt="@item.Name">
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card-body">
-                            <p class="card-text"> @item.Description </p>
 
+<!-- ======= Breadcrumbs ======= -->
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+
+        <ol>
+           
+        </ol>
+        <h2>Cyber Protection Products</h2>
+
+    </div>
+</section><!-- End Breadcrumbs -->
+<!-- ======= Portfolio Details Section ======= -->
+<section id="portfolio-details" class="portfolio-details">
+    <div class="container">
+
+        <div class="row gy-4">
+            @foreach (var item in Model)
+    {
+            <div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                            @if (item.productcode == "green")
+                            {
+                                <div class="rectangle green-rectangle"></div>
+                            }
+                            else if (item.productcode == "orange")
+                            {
+                                <div class="rectangle orange-rectangle"></div>
+                            }
+                            else if (item.productcode == "red")
+                            {
+                                <div class="rectangle red-rectangle"></div>
+                            }
+                        <div class="trial-info">
+                            <p>Trial Available</p>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="card-footer ">
-                            <p class="card-text">
-                                  <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@item.id">
-                                        <i class="bi bi-eye-fill"></i> Show Details
-                                    </a>
-                            </p>
-                        </div>
-                    </div>
+                    <h3>@item.Name</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: @item.compatibility </li>
+                            <li><strong>Engine</strong>: @item.engine</li>
+                        <li><strong>Data Center Location</strong>: @item.datacenterlocation</li>
+                        <li><strong>Subscription</strong>: <a href="#">@item.subscription</a></li>
+                    </ul>
+                    <a  class="buy-btn" asp-action="Details" asp-route-id="@item.id">Get Started</a>
                 </div>
+
             </div>
+            }
+
+            <div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                        <div class="rectangle red-rectangle"></div>
+                        <div class="trial-info">
+                            <p>Trial Available</p>
+                        </div>
+                    </div>
+                    <h3>Decisive Cyber Protect Plus - Workstations</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: Windows | Linux </li>
+                        <li><strong>Engine</strong>: Acronis Advanced Protection</li>
+                        <li><strong>Data Center Location</strong>: Botswana</li>
+                        <li><strong>Subscription</strong>: <a href="#">Monthly | Annual</a></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                        <div class="rectangle orange-rectangle"></div>
+                        <div class="trial-info">
+                            <p>Trial Available</p>
+                        </div>
+                    </div>
+                    <h3>Decisive Cyber Protect Premuim - Workstations</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: Windows | Linux </li>
+                        <li><strong>Engine</strong>:  Acronis Advanced Protection</li>
+                        <li><strong>Data Center Location</strong>: Botswana</li>
+                        <li><strong>Subscription</strong>: <a href="#">Monthly | Annual</a></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                        <div class="rectangle green-rectangle"></div>
+                        <div class="trial-info">
+                            <p>Trial Available</p>
+                        </div>
+                    </div>
+                    <h3>Decisive Cyber Protect Essentials - Virtual Machines</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: HyperV | VMWare | Oracle VM | Virtuozzo | KVM </li>
+                        <li><strong>Engine</strong>: Acronis Standard Protection</li>
+                        <li><strong>Data Center Location</strong>: Botswana</li>
+                        <li><strong>Subscription</strong>: <a href="#">Monthly | Annual</a></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                        <div class="rectangle red-rectangle"></div>
+                        <div class="trial-info">
+                            <p>Trial Available</p>
+                        </div>
+                    </div>
+                    <h3>Decisive Cyber Protect Plus - Virtual Machines</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: HyperV | VMWare | Oracle VM | Virtuozzo | KVM</li>
+                        <li><strong>Engine</strong>:  Acronis Advanced Protection</li>
+                        <li><strong>Data Center Location</strong>: Botswana</li>
+                        <li><strong>Subscription</strong>: <a href="#">Monthly | Annual</a></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                        <div class="rectangle orange-rectangle"></div>
+                        <div class="trial-info">
+                            <p>Trial Available</p>
+                        </div>
+                    </div>
+                    <h3>Decisive Cyber Protect Premuim - Virtual Machines</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: HyperV | VMWare | Oracle VM | Virtuozzo | KVM</li>
+                        <li><strong>Engine</strong>:  Acronis Advanced Protection</li>
+                        <li><strong>Data Center Location</strong>: Botswana</li>
+                        <li><strong>Subscription</strong>: <a href="#">Monthly | Annual</a></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                        <div class="rectangle green-rectangle"></div>
+                        <div class="trial-info">
+                            <p>Trial Available</p>
+                        </div>
+                    </div>
+                    <h3>Decisive Cyber Protect Essentials - Phsyical Server</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: Windows | Linux</li>
+                        <li><strong>Engine</strong>: Acronis Standard Protection</li>
+                        <li><strong>Data Center Location</strong>: Botswana</li>
+                        <li><strong>Subscription</strong>: <a href="#">Monthly | Annual</a></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+
+            </div><div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                        <div class="rectangle red-rectangle"></div>
+                        <div class="trial-info">
+                            <p>Trial Available</p>
+                        </div>
+                    </div>
+                    <h3>Decisive Cyber Protect Plus - Phsyical Server</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: Windows | Linux</li>
+                        <li><strong>Engine</strong>:  Acronis Advanced Protection</li>
+                        <li><strong>Data Center Location</strong>: Botswana</li>
+                        <li><strong>Subscription</strong>: <a href="#">Monthly | Annual</a></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+
+            </div><div class="col-lg-4">
+                <div class="portfolio-info">
+                    <div class="side-elements">
+                        <div class="rectangle orange-rectangle"></div>
+                        <div class="trial-info">
+                            <p>Trial Available</p>
+                        </div>
+                    </div>
+                    <h3>Decisive Cyber Protect Premuim - Phsyical Server</h3>
+                    <ul>
+                        <li><strong>Compatibility</strong>: Windows | Linux</li>
+                        <li><strong>Engine</strong>:  Acronis Advanced Protection</li>
+                        <li><strong>Data Center Location</strong>: Botswana</li>
+                        <li><strong>Subscription</strong>: <a href="#">Monthly | Annual</a></li>
+                    </ul>
+                    <a href="#" class="buy-btn">Get Started</a>
+                </div>
+
+            </div>
+
         </div>
-    }
-</div>
+
+    </div>
+</section><!-- End Portfolio Details Section -->
+
+
+
 

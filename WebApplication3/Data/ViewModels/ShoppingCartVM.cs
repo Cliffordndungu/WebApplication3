@@ -15,5 +15,7 @@ namespace WebApplication3.Data.ViewModels
         // Add a property to hold product prices
         public List<ProductPrice> ProductPrices { get; set; }
 
+        public List<ProductDetails> ProductDetails { get; set; }
+
     }
 }

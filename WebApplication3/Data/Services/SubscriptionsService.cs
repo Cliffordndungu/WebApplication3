@@ -10,9 +10,11 @@ namespace WebApplication3.Data.Services
 
     {
         private readonly ShoppingCart _ShoppingCart;
-        public SubscriptionsService(ShoppingCart shoppingCart)      
+        private readonly AcronisTokenService _acronisservice;
+        public SubscriptionsService(ShoppingCart shoppingCart, AcronisTokenService acronisservice)      
         {
             _ShoppingCart = shoppingCart;
+            _acronisservice = acronisservice;
         }
         public async Task CreateSubscriptionsAsync(string customerId, List<ShoppingCartItem> items)
         {
@@ -76,8 +78,26 @@ namespace WebApplication3.Data.Services
             return intent;
         }
 
+        public void CustomerLicenseIncrement(string subitemid, string priceid, int quantity, string tenantid)
+        {
 
-        
+            //update subscription
+            var options = new SubscriptionItemUpdateOptions
+            {
+                PaymentBehavior = "allow_incomplete",
+                ProrationBehavior = "always_invoice", 
+                Quantity = quantity,
+            };
+            var service = new SubscriptionItemService();
+            service.Update(subitemid, options);
+
+            //update tenant 
+
+            _acronisservice.licenseincrement(priceid, quantity, tenantid);  
+
+
+
+        }
     }
 }
 

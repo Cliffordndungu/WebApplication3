@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Client.Extensions.Msal;
 using Stripe;
 using System;
 using System.Collections.Generic;
@@ -140,19 +141,60 @@ namespace WebApplication3.Data.Cart
 
                 if (stripeProduct != null)
                 {
-                    var priceListOptions = new PriceListOptions
+                    //check if the productid is for cloud storage
+                    if (productId == "prod_PgyiINyEyBPyea")
                     {
-                        Product = productId,
-                    };
+                        // Find the corresponding shopping cart item
+                        var cartItem = shoppingCartItems.FirstOrDefault(item => item.productid == productId);
+                        if (cartItem != null)
+                        {
+                            // Extract quantity from the shopping cart item
+                            var storage = cartItem.quanitity;
 
-                    var prices = await priceService.ListAsync(priceListOptions);
+                            var options = new UpcomingInvoiceOptions
+                            {
+                                Customer = "cus_PJnTI05Yw7lNhG",
+                                SubscriptionItems = new List<InvoiceSubscriptionItemOptions>
+                                {
+                                 new InvoiceSubscriptionItemOptions
+                                 {
+                                     Price = "price_1OrakiDprfyvhQjoLmzI7dKC",
+                                      Quantity = storage,
+                                  }
+                                 }
+                            };
 
-                    if (prices.Data.Count > 0)
-                    {
-                        // Assuming you want to use the first price in the list
-                        var price = prices.Data.First();
-                        productPrices[productId] = (long)price.UnitAmount;
+
+
+                            var service = new InvoiceService();
+                            var UpcomingPrice = service.Upcoming(options);
+                            long totalupcomingprice = UpcomingPrice.AmountDue / storage;
+
+                            productPrices[productId] = totalupcomingprice;
+                        }
                     }
+                    else
+                    {
+
+                        //if for cloud storage 
+                        //productprices[productid] = get the pricing for the item 
+                        //else do below. 
+
+                        var priceListOptions = new PriceListOptions
+                        {
+                            Product = productId,
+                        };
+
+                        var prices = await priceService.ListAsync(priceListOptions);
+
+                        if (prices.Data.Count > 0)
+                        {
+                            // Assuming you want to use the first price in the list
+                            var price = prices.Data.First();
+                            productPrices[productId] = (long)price.UnitAmount;
+                        }
+                    }
+                   
                 }
             }
 
@@ -169,6 +211,31 @@ namespace WebApplication3.Data.Cart
 
             return subtotal;
         }
+
+        //public async Task<string> GetProductDetails()
+        //{
+        //    var shoppingCartItems = _context.ShoppingCartItems.Where(n => n.ShoppingCartId == ShoppingCartId).ToList();
+        //    var productIds = shoppingCartItems.Select(item => item.productid).ToList();
+
+           
+        //    var productDetails = new List<(string Name, string Description)>();
+        //    var service = new ProductService();
+        //    // Fetch product details from Stripe
+        //    foreach (var productId in productIds)
+        //    {
+               
+                
+        //        var product = service.Get(productId);
+        //        if (product != null)
+        //        {
+        //            productDetails.Add((product.Name, product.Description));
+        //        }
+        //    }
+
+        //    // Now you have product details, you can return it
+        //    return productDetails;
+        //}
+    
 
         public static ShoppingCart GetShoppingCart(IServiceProvider services)
         {
@@ -218,6 +285,49 @@ namespace WebApplication3.Data.Cart
 
                 _context.ShoppingCartItems.Add(shoppingCartItem);
             } else
+            {
+                shoppingCartItem.quanitity++;
+            }
+            _context.SaveChanges();
+        }
+
+        public async void AddItemsToCart(int storagequantity, int devicequantity,  string productid)
+        {
+            var shoppingCartItem = _context.ShoppingCartItems.FirstOrDefault(n => n.productid == productid && n.ShoppingCartId == ShoppingCartId);
+            // get price id from product id then pass it pass it as product id into shopping cart items. 
+            string storageproductid = "prod_PgyiINyEyBPyea";
+
+            if (shoppingCartItem == null)
+            {
+               var shoppingCartItem1 = new ShoppingCartItem()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ShoppingCartId = ShoppingCartId,
+                    productid = productid,
+                    quanitity = devicequantity
+
+                    //quanitity = quantity
+                };
+
+                _context.ShoppingCartItems.Add(shoppingCartItem1);
+
+                if (storagequantity > 0)
+                {
+               var  shoppingCartItem2 = new ShoppingCartItem()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ShoppingCartId = ShoppingCartId,
+                    productid = storageproductid,
+                    quanitity = storagequantity
+
+                    //quanitity = quantity
+                };
+
+
+                _context.ShoppingCartItems.Add(shoppingCartItem2);
+                }
+            }
+            else
             {
                 shoppingCartItem.quanitity++;
             }
